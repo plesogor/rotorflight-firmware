@@ -1,0 +1,6099 @@
+{
+  "source_files": [
+    "src/main/cli/cli.c",
+    "src/main/cli/settings.c",
+    "src/main/cli/settings.h"
+  ],
+  "commands": [
+    {
+      "name": "adjfunc",
+      "description": "configure adjustment functions",
+      "args": "<index> <func> <enable channel> <start> <end> <value channel> <dec start> <dec end> <inc start> <inc end> <step size> <value min> <value max>",
+      "handler": "cliAdjustmentRange",
+      "feature_flags": [],
+      "argument_patterns": [
+        "<index> <func> <enable channel> <start> <end> <value channel> <dec start> <dec end> <inc start> <inc end> <step size> <value min> <value max>"
+      ]
+    },
+    {
+      "name": "aux",
+      "description": "configure modes",
+      "args": "<index> <mode> <aux> <start> <end> <logic>",
+      "handler": "cliAux",
+      "feature_flags": [],
+      "argument_patterns": [
+        "<index> <mode> <aux> <start> <end> <logic>"
+      ]
+    },
+    {
+      "name": "batch",
+      "description": "start or end a batch of commands",
+      "args": "start | end",
+      "handler": "cliBatch",
+      "feature_flags": [
+        "#ifdef USE_CLI_BATCH"
+      ],
+      "argument_patterns": [
+        "start | end"
+      ]
+    },
+    {
+      "name": "bind_rx",
+      "description": "initiate binding for RX SPI or SRXL2",
+      "args": null,
+      "handler": "cliRxBind",
+      "feature_flags": [
+        "#if defined(USE_RX_BIND)"
+      ],
+      "argument_patterns": []
+    },
+    {
+      "name": "bl",
+      "description": "reboot into bootloader",
+      "args": "[flash|rom]",
+      "handler": "cliBootloader",
+      "feature_flags": [
+        "#if defined(USE_FLASH_BOOT_LOADER)"
+      ],
+      "argument_patterns": [
+        "[flash|rom]"
+      ]
+    },
+    {
+      "name": "bl",
+      "description": "reboot into bootloader",
+      "args": "[rom]",
+      "handler": "cliBootloader",
+      "feature_flags": [
+        "#if defined(USE_FLASH_BOOT_LOADER) | ELSE"
+      ],
+      "argument_patterns": [
+        "[rom]"
+      ]
+    },
+    {
+      "name": "board_name",
+      "description": "get / set the name of the board model",
+      "args": "[board name]",
+      "handler": "cliBoardName",
+      "feature_flags": [
+        "#if defined(USE_BOARD_INFO)"
+      ],
+      "argument_patterns": [
+        "[board name]"
+      ]
+    },
+    {
+      "name": "board_design",
+      "description": "get / set the name of the board design",
+      "args": "[board design]",
+      "handler": "cliBoardDesign",
+      "feature_flags": [
+        "#if defined(USE_BOARD_INFO)"
+      ],
+      "argument_patterns": [
+        "[board design]"
+      ]
+    },
+    {
+      "name": "color",
+      "description": "configure colors",
+      "args": null,
+      "handler": "cliColor",
+      "feature_flags": [
+        "#ifdef USE_LED_STRIP_STATUS_MODE"
+      ],
+      "argument_patterns": []
+    },
+    {
+      "name": "defaults",
+      "description": "reset to defaults and reboot",
+      "args": "{show} {nosave} {bare} {group_id <id>}",
+      "handler": "cliDefaults",
+      "feature_flags": [
+        "#if defined(USE_CUSTOM_DEFAULTS)"
+      ],
+      "argument_patterns": [
+        "{show} {nosave} {bare} {group_id <id>}"
+      ]
+    },
+    {
+      "name": "defaults",
+      "description": "reset to defaults and reboot",
+      "args": "{nosave}",
+      "handler": "cliDefaults",
+      "feature_flags": [
+        "#if defined(USE_CUSTOM_DEFAULTS) | ELSE"
+      ],
+      "argument_patterns": [
+        "{nosave}"
+      ]
+    },
+    {
+      "name": "dfu",
+      "description": "reboot into DFU bootloader",
+      "args": null,
+      "handler": "cliDFU",
+      "feature_flags": [],
+      "argument_patterns": []
+    },
+    {
+      "name": "diff",
+      "description": "list configuration changes from default",
+      "args": "[master|profile|rates|hardware|all] {defaults|bare}",
+      "handler": "cliDiff",
+      "feature_flags": [],
+      "argument_patterns": [
+        "[master|profile|rates|hardware|all] {defaults|bare}"
+      ]
+    },
+    {
+      "name": "dma",
+      "description": "show/set DMA assignments",
+      "args": "<> | <device> <index> list | <device> <index> [<option>|none] | list | show",
+      "handler": "cliDma",
+      "feature_flags": [
+        "#ifdef USE_RESOURCE_MGMT",
+        "#ifdef USE_DMA",
+        "#ifdef USE_DMA_SPEC"
+      ],
+      "argument_patterns": [
+        "<> | <device> <index> list | <device> <index> [<option>|none] | list | show"
+      ]
+    },
+    {
+      "name": "dma",
+      "description": "show DMA assignments",
+      "args": "show",
+      "handler": "cliDma",
+      "feature_flags": [
+        "#ifdef USE_RESOURCE_MGMT",
+        "#ifdef USE_DMA",
+        "#ifdef USE_DMA_SPEC | ELSE"
+      ],
+      "argument_patterns": [
+        "show"
+      ]
+    },
+    {
+      "name": "dshot_telemetry_info",
+      "description": "display dshot telemetry info and stats",
+      "args": null,
+      "handler": "cliDshotTelemetryInfo",
+      "feature_flags": [
+        "#ifdef USE_DSHOT_TELEMETRY"
+      ],
+      "argument_patterns": []
+    },
+    {
+      "name": "dshotprog",
+      "description": "program DShot ESC(s)",
+      "args": "<index> <command>+",
+      "handler": "cliDshotProg",
+      "feature_flags": [
+        "#ifdef USE_DSHOT"
+      ],
+      "argument_patterns": [
+        "<index> <command>+"
+      ]
+    },
+    {
+      "name": "escprog",
+      "description": "passthrough esc to serial",
+      "args": "<mode [sk/bl/ki/cc]> <index>",
+      "handler": "cliEscPassthrough",
+      "feature_flags": [
+        "#ifdef USE_ESCSERIAL"
+      ],
+      "argument_patterns": [
+        "<mode [sk/bl/ki/cc]> <index>"
+      ]
+    },
+    {
+      "name": "exit",
+      "description": null,
+      "args": null,
+      "handler": "cliExit",
+      "feature_flags": [],
+      "argument_patterns": []
+    },
+    {
+      "name": "fbus_sensors",
+      "description": "show observed FBUS sensors",
+      "args": "[clear]",
+      "handler": "cliFbusSensors",
+      "feature_flags": [
+        "#if defined(USE_FBUS_MASTER) || defined(USE_SPORT_MASTER)"
+      ],
+      "argument_patterns": [
+        "[clear]"
+      ]
+    },
+    {
+      "name": "flash_erase",
+      "description": "erase flash chip",
+      "args": null,
+      "handler": "cliFlashErase",
+      "feature_flags": [
+        "#ifdef USE_FLASHFS"
+      ],
+      "argument_patterns": []
+    },
+    {
+      "name": "flash_info",
+      "description": "show flash chip info",
+      "args": null,
+      "handler": "cliFlashInfo",
+      "feature_flags": [
+        "#ifdef USE_FLASHFS"
+      ],
+      "argument_patterns": []
+    },
+    {
+      "name": "flash_read",
+      "description": null,
+      "args": "<length> <address>",
+      "handler": "cliFlashRead",
+      "feature_flags": [
+        "#ifdef USE_FLASHFS",
+        "#ifdef USE_FLASH_TOOLS"
+      ],
+      "argument_patterns": [
+        "<length> <address>"
+      ]
+    },
+    {
+      "name": "flash_fill",
+      "description": "fill device with predefined pattern",
+      "args": null,
+      "handler": "cliFlashFill",
+      "feature_flags": [
+        "#ifdef USE_FLASHFS",
+        "#ifdef USE_FLASH_TOOLS"
+      ],
+      "argument_patterns": []
+    },
+    {
+      "name": "flash_verify",
+      "description": "verify device with predefined pattern",
+      "args": null,
+      "handler": "cliFlashVerify",
+      "feature_flags": [
+        "#ifdef USE_FLASHFS",
+        "#ifdef USE_FLASH_TOOLS"
+      ],
+      "argument_patterns": []
+    },
+    {
+      "name": "flash_write",
+      "description": null,
+      "args": "<address> <message>",
+      "handler": "cliFlashWrite",
+      "feature_flags": [
+        "#ifdef USE_FLASHFS",
+        "#ifdef USE_FLASH_TOOLS"
+      ],
+      "argument_patterns": [
+        "<address> <message>"
+      ]
+    },
+    {
+      "name": "flash_erase_sector",
+      "description": "erase flash sector(s)",
+      "args": "<address> [<length>]",
+      "handler": "cliFlashEraseSector",
+      "feature_flags": [
+        "#ifdef USE_FLASHFS",
+        "#ifdef USE_FLASH_TOOLS"
+      ],
+      "argument_patterns": [
+        "<address> [<length>]"
+      ]
+    },
+    {
+      "name": "flashfs_initial_erase",
+      "description": "invoke initial erase",
+      "args": null,
+      "handler": "cliFlashfsInitialErase",
+      "feature_flags": [
+        "#ifdef USE_FLASHFS",
+        "#ifdef USE_FLASH_TOOLS",
+        "#ifdef USE_FLASHFS_LOOP"
+      ],
+      "argument_patterns": []
+    },
+    {
+      "name": "get",
+      "description": "get variable value",
+      "args": "[name]",
+      "handler": "cliGet",
+      "feature_flags": [],
+      "argument_patterns": [
+        "[name]"
+      ]
+    },
+    {
+      "name": "gpspassthrough",
+      "description": "passthrough gps to serial",
+      "args": null,
+      "handler": "cliGpsPassthrough",
+      "feature_flags": [
+        "#ifdef USE_GPS"
+      ],
+      "argument_patterns": []
+    },
+    {
+      "name": "gyroregisters",
+      "description": "dump gyro config registers contents",
+      "args": null,
+      "handler": "cliDumpGyroRegisters",
+      "feature_flags": [
+        "#if defined(USE_GYRO_REGISTER_DUMP) && !defined(SIMULATOR_BUILD)"
+      ],
+      "argument_patterns": []
+    },
+    {
+      "name": "help",
+      "description": "display command help",
+      "args": "[search string]",
+      "handler": "cliHelp",
+      "feature_flags": [],
+      "argument_patterns": [
+        "[search string]"
+      ]
+    },
+    {
+      "name": "led",
+      "description": "configure leds",
+      "args": null,
+      "handler": "cliLed",
+      "feature_flags": [
+        "#ifdef USE_LED_STRIP_STATUS_MODE"
+      ],
+      "argument_patterns": []
+    },
+    {
+      "name": "manufacturer_id",
+      "description": "get / set the id of the board manufacturer",
+      "args": "[manufacturer id]",
+      "handler": "cliManufacturerId",
+      "feature_flags": [
+        "#if defined(USE_BOARD_INFO)"
+      ],
+      "argument_patterns": [
+        "[manufacturer id]"
+      ]
+    },
+    {
+      "name": "map",
+      "description": "configure rc channel order",
+      "args": "[<map>]",
+      "handler": "cliMap",
+      "feature_flags": [],
+      "argument_patterns": [
+        "[<map>]"
+      ]
+    },
+    {
+      "name": "mcu_id",
+      "description": "id of the microcontroller",
+      "args": null,
+      "handler": "cliMcuId",
+      "feature_flags": [],
+      "argument_patterns": []
+    },
+    {
+      "name": "mode_color",
+      "description": "configure mode and special colors",
+      "args": null,
+      "handler": "cliModeColor",
+      "feature_flags": [
+        "#ifdef USE_LED_STRIP_STATUS_MODE"
+      ],
+      "argument_patterns": []
+    },
+    {
+      "name": "msc",
+      "description": "switch into msc mode",
+      "args": "[<timezone offset minutes>]",
+      "handler": "cliMsc",
+      "feature_flags": [
+        "#ifdef USE_USB_MSC",
+        "#ifdef USE_RTC_TIME"
+      ],
+      "argument_patterns": [
+        "[<timezone offset minutes>]"
+      ]
+    },
+    {
+      "name": "msc",
+      "description": "switch into msc mode",
+      "args": null,
+      "handler": "cliMsc",
+      "feature_flags": [
+        "#ifdef USE_USB_MSC",
+        "#ifdef USE_RTC_TIME | ELSE"
+      ],
+      "argument_patterns": []
+    },
+    {
+      "name": "play_sound",
+      "description": null,
+      "args": "[<index>]",
+      "handler": "cliPlaySound",
+      "feature_flags": [
+        "#ifndef MINIMAL_CLI"
+      ],
+      "argument_patterns": [
+        "[<index>]"
+      ]
+    },
+    {
+      "name": "profile",
+      "description": "change profile",
+      "args": "[<index>]",
+      "handler": "cliProfile",
+      "feature_flags": [],
+      "argument_patterns": [
+        "[<index>]"
+      ]
+    },
+    {
+      "name": "rateprofile",
+      "description": "change rate profile",
+      "args": "[<index>]",
+      "handler": "cliRateProfile",
+      "feature_flags": [],
+      "argument_patterns": [
+        "[<index>]"
+      ]
+    },
+    {
+      "name": "setpoint_info",
+      "description": "show setpoint smoothing operational settings",
+      "args": null,
+      "handler": "cliSetpointInfo",
+      "feature_flags": [],
+      "argument_patterns": []
+    },
+    {
+      "name": "resource",
+      "description": "show/set resources",
+      "args": "<> | <resource name> <index> [<pin>|none] | show [all]",
+      "handler": "cliResource",
+      "feature_flags": [
+        "#ifdef USE_RESOURCE_MGMT"
+      ],
+      "argument_patterns": [
+        "<> | <resource name> <index> [<pin>|none] | show [all]"
+      ]
+    },
+    {
+      "name": "rxfail",
+      "description": "show/set rx failsafe settings",
+      "args": null,
+      "handler": "cliRxFailsafe",
+      "feature_flags": [],
+      "argument_patterns": []
+    },
+    {
+      "name": "save",
+      "description": "save and reboot",
+      "args": null,
+      "handler": "cliSave",
+      "feature_flags": [],
+      "argument_patterns": []
+    },
+    {
+      "name": "sd_info",
+      "description": "sdcard info",
+      "args": null,
+      "handler": "cliSdInfo",
+      "feature_flags": [
+        "#ifdef USE_SDCARD"
+      ],
+      "argument_patterns": []
+    },
+    {
+      "name": "serial",
+      "description": "configure serial ports",
+      "args": null,
+      "handler": "cliSerial",
+      "feature_flags": [],
+      "argument_patterns": []
+    },
+    {
+      "name": "serialpassthrough",
+      "description": "passthrough serial data data from port 1 to VCP / port 2",
+      "args": "<id1> [<baud1>] [<mode1>] [none|<dtr pinio>|reset] [<id2>] [<baud2>] [<mode2>]",
+      "handler": "cliSerialPassthrough",
+      "feature_flags": [
+        "#if defined(USE_SERIAL_PASSTHROUGH)",
+        "#if defined(USE_PINIO)"
+      ],
+      "argument_patterns": [
+        "<id1> [<baud1>] [<mode1>] [none|<dtr pinio>|reset] [<id2>] [<baud2>] [<mode2>]"
+      ]
+    },
+    {
+      "name": "serialpassthrough",
+      "description": "passthrough serial data from port 1 to VCP / port 2",
+      "args": "<id1> [<baud1>] [<mode1>] [none|reset] [<id2>] [<baud2>] [<mode2>]",
+      "handler": "cliSerialPassthrough",
+      "feature_flags": [
+        "#if defined(USE_SERIAL_PASSTHROUGH)",
+        "#if defined(USE_PINIO) | ELSE"
+      ],
+      "argument_patterns": [
+        "<id1> [<baud1>] [<mode1>] [none|reset] [<id2>] [<baud2>] [<mode2>]"
+      ]
+    },
+    {
+      "name": "set",
+      "description": "change setting",
+      "args": "[<name>=<value>]",
+      "handler": "cliSet",
+      "feature_flags": [],
+      "argument_patterns": [
+        "[<name>=<value>]"
+      ]
+    },
+    {
+      "name": "signature",
+      "description": "get / set the board type signature",
+      "args": "[signature]",
+      "handler": "cliSignature",
+      "feature_flags": [
+        "#if defined(USE_SIGNATURE)"
+      ],
+      "argument_patterns": [
+        "[signature]"
+      ]
+    },
+    {
+      "name": "status",
+      "description": "show status",
+      "args": null,
+      "handler": "cliStatus",
+      "feature_flags": [],
+      "argument_patterns": []
+    },
+    {
+      "name": "tasks",
+      "description": "show task stats",
+      "args": null,
+      "handler": "cliTasks",
+      "feature_flags": [],
+      "argument_patterns": []
+    },
+    {
+      "name": "timer",
+      "description": "show/set timers",
+      "args": "<> | <pin> list | <pin> [af<alternate function>|none|<option(deprecated)>] | list | show",
+      "handler": "cliTimer",
+      "feature_flags": [
+        "#ifdef USE_TIMER_MGMT"
+      ],
+      "argument_patterns": [
+        "<> | <pin> list | <pin> [af<alternate function>|none|<option(deprecated)>] | list | show"
+      ]
+    },
+    {
+      "name": "version",
+      "description": "show version",
+      "args": null,
+      "handler": "cliVersion",
+      "feature_flags": [],
+      "argument_patterns": []
+    },
+    {
+      "name": "vtx",
+      "description": "vtx channels on switch",
+      "args": null,
+      "handler": "cliVtx",
+      "feature_flags": [
+        "#ifdef USE_VTX_CONTROL",
+        "#ifdef MINIMAL_CLI"
+      ],
+      "argument_patterns": []
+    },
+    {
+      "name": "vtx",
+      "description": "vtx channels on switch",
+      "args": "<index> <aux_channel> <vtx_band> <vtx_channel> <vtx_power> <start_range> <end_range>",
+      "handler": "cliVtx",
+      "feature_flags": [
+        "#ifdef USE_VTX_CONTROL",
+        "#ifdef MINIMAL_CLI | ELSE"
+      ],
+      "argument_patterns": [
+        "<index> <aux_channel> <vtx_band> <vtx_channel> <vtx_power> <start_range> <end_range>"
+      ]
+    },
+    {
+      "name": "vtx_info",
+      "description": "vtx power config dump",
+      "args": null,
+      "handler": "cliVtxInfo",
+      "feature_flags": [
+        "#ifdef USE_VTX_TABLE"
+      ],
+      "argument_patterns": []
+    },
+    {
+      "name": "vtxtable",
+      "description": "vtx frequency table",
+      "args": "<band> <bandname> <bandletter> [FACTORY|CUSTOM] <freq> ... <freq>\r\n",
+      "handler": "cliVtxTable",
+      "feature_flags": [
+        "#ifdef USE_VTX_TABLE"
+      ],
+      "argument_patterns": [
+        "<band> <bandname> <bandletter> [FACTORY|CUSTOM] <freq> ... <freq>"
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "name": "gyro_overflow_detect",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_GYRO_OVERFLOW_CHECK",
+      "pgn": "PG_GYRO_CONFIG",
+      "offset": "gyroConfig_t, checkOverflow",
+      "feature_flags": [
+        "#ifdef USE_GYRO_OVERFLOW_CHECK"
+      ]
+    },
+    {
+      "name": "gyro_high_range",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_GYRO_CONFIG",
+      "offset": "gyroConfig_t, gyro_high_fsr",
+      "feature_flags": [
+        "#if defined(USE_GYRO_SPI_ICM20649)"
+      ]
+    },
+    {
+      "name": "gyro_rate_sync",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_GYRO_CONFIG",
+      "offset": "gyroConfig_t, gyro_rate_sync",
+      "feature_flags": []
+    },
+    {
+      "name": "gyro_calib_duration",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "50,  3000",
+      "pgn": "PG_GYRO_CONFIG",
+      "offset": "gyroConfig_t, gyroCalibrationDuration",
+      "feature_flags": []
+    },
+    {
+      "name": "gyro_calib_noise_limit",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0,  200",
+      "pgn": "PG_GYRO_CONFIG",
+      "offset": "gyroConfig_t, gyroMovementCalibrationThreshold",
+      "feature_flags": []
+    },
+    {
+      "name": "gyro_lpf1_dyn_min_hz",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, DYN_LPF_MAX_HZ",
+      "pgn": "PG_GYRO_CONFIG",
+      "offset": "gyroConfig_t, gyro_lpf1_dyn_min_hz",
+      "feature_flags": [
+        "#ifdef USE_DYN_LPF"
+      ]
+    },
+    {
+      "name": "gyro_lpf1_dyn_max_hz",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, DYN_LPF_MAX_HZ",
+      "pgn": "PG_GYRO_CONFIG",
+      "offset": "gyroConfig_t, gyro_lpf1_dyn_max_hz",
+      "feature_flags": [
+        "#ifdef USE_DYN_LPF"
+      ]
+    },
+    {
+      "name": "gyro_notch1_hz",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, LPF_MAX_HZ",
+      "pgn": "PG_GYRO_CONFIG",
+      "offset": "gyroConfig_t, gyro_soft_notch_hz_1",
+      "feature_flags": []
+    },
+    {
+      "name": "gyro_notch1_cutoff",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, LPF_MAX_HZ",
+      "pgn": "PG_GYRO_CONFIG",
+      "offset": "gyroConfig_t, gyro_soft_notch_cutoff_1",
+      "feature_flags": []
+    },
+    {
+      "name": "gyro_notch2_hz",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, LPF_MAX_HZ",
+      "pgn": "PG_GYRO_CONFIG",
+      "offset": "gyroConfig_t, gyro_soft_notch_hz_2",
+      "feature_flags": []
+    },
+    {
+      "name": "gyro_notch2_cutoff",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, LPF_MAX_HZ",
+      "pgn": "PG_GYRO_CONFIG",
+      "offset": "gyroConfig_t, gyro_soft_notch_cutoff_2",
+      "feature_flags": []
+    },
+    {
+      "name": "acc_high_range",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_ACCELEROMETER_CONFIG",
+      "offset": "accelerometerConfig_t, acc_high_fsr",
+      "feature_flags": [
+        "#if defined(USE_ACC)",
+        "#if defined(USE_GYRO_SPI_ICM20649)"
+      ]
+    },
+    {
+      "name": "acc_trim_pitch",
+      "type_expr": "VAR_INT16  | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "-300, 300",
+      "pgn": "PG_ACCELEROMETER_CONFIG",
+      "offset": "accelerometerConfig_t, accelerometerTrims.values.pitch",
+      "feature_flags": [
+        "#if defined(USE_ACC)"
+      ]
+    },
+    {
+      "name": "acc_trim_roll",
+      "type_expr": "VAR_INT16  | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "-300, 300",
+      "pgn": "PG_ACCELEROMETER_CONFIG",
+      "offset": "accelerometerConfig_t, accelerometerTrims.values.roll",
+      "feature_flags": [
+        "#if defined(USE_ACC)"
+      ]
+    },
+    {
+      "name": "align_mag",
+      "type_expr": "VAR_UINT8  | HARDWARE_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_ALIGNMENT",
+      "pgn": "PG_COMPASS_CONFIG",
+      "offset": "compassConfig_t, mag_alignment",
+      "feature_flags": [
+        "#ifdef USE_MAG"
+      ]
+    },
+    {
+      "name": "mag_align_roll",
+      "type_expr": "VAR_INT16  | HARDWARE_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "-3600, 3600",
+      "pgn": "PG_COMPASS_CONFIG",
+      "offset": "compassConfig_t, mag_customAlignment.roll",
+      "feature_flags": [
+        "#ifdef USE_MAG"
+      ]
+    },
+    {
+      "name": "mag_align_pitch",
+      "type_expr": "VAR_INT16  | HARDWARE_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "-3600, 3600",
+      "pgn": "PG_COMPASS_CONFIG",
+      "offset": "compassConfig_t, mag_customAlignment.pitch",
+      "feature_flags": [
+        "#ifdef USE_MAG"
+      ]
+    },
+    {
+      "name": "mag_align_yaw",
+      "type_expr": "VAR_INT16  | HARDWARE_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "-3600, 3600",
+      "pgn": "PG_COMPASS_CONFIG",
+      "offset": "compassConfig_t, mag_customAlignment.yaw",
+      "feature_flags": [
+        "#ifdef USE_MAG"
+      ]
+    },
+    {
+      "name": "mag_bustype",
+      "type_expr": "VAR_UINT8  | HARDWARE_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_BUS_TYPE",
+      "pgn": "PG_COMPASS_CONFIG",
+      "offset": "compassConfig_t, mag_busType",
+      "feature_flags": [
+        "#ifdef USE_MAG"
+      ]
+    },
+    {
+      "name": "mag_i2c_device",
+      "type_expr": "VAR_UINT8  | HARDWARE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, I2CDEV_COUNT",
+      "pgn": "PG_COMPASS_CONFIG",
+      "offset": "compassConfig_t, mag_i2c_device",
+      "feature_flags": [
+        "#ifdef USE_MAG"
+      ]
+    },
+    {
+      "name": "mag_i2c_address",
+      "type_expr": "VAR_UINT8  | HARDWARE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, I2C_ADDR7_MAX",
+      "pgn": "PG_COMPASS_CONFIG",
+      "offset": "compassConfig_t, mag_i2c_address",
+      "feature_flags": [
+        "#ifdef USE_MAG"
+      ]
+    },
+    {
+      "name": "mag_spi_device",
+      "type_expr": "VAR_UINT8  | HARDWARE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, SPIDEV_COUNT",
+      "pgn": "PG_COMPASS_CONFIG",
+      "offset": "compassConfig_t, mag_spi_device",
+      "feature_flags": [
+        "#ifdef USE_MAG"
+      ]
+    },
+    {
+      "name": "baro_bustype",
+      "type_expr": "VAR_UINT8  | HARDWARE_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_BUS_TYPE",
+      "pgn": "PG_BAROMETER_CONFIG",
+      "offset": "barometerConfig_t, baro_busType",
+      "feature_flags": [
+        "#ifdef USE_BARO"
+      ]
+    },
+    {
+      "name": "baro_spi_device",
+      "type_expr": "VAR_UINT8  | HARDWARE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 5",
+      "pgn": "PG_BAROMETER_CONFIG",
+      "offset": "barometerConfig_t, baro_spi_device",
+      "feature_flags": [
+        "#ifdef USE_BARO"
+      ]
+    },
+    {
+      "name": "baro_i2c_device",
+      "type_expr": "VAR_UINT8  | HARDWARE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 5",
+      "pgn": "PG_BAROMETER_CONFIG",
+      "offset": "barometerConfig_t, baro_i2c_device",
+      "feature_flags": [
+        "#ifdef USE_BARO"
+      ]
+    },
+    {
+      "name": "baro_i2c_address",
+      "type_expr": "VAR_UINT8  | HARDWARE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, I2C_ADDR7_MAX",
+      "pgn": "PG_BAROMETER_CONFIG",
+      "offset": "barometerConfig_t, baro_i2c_address",
+      "feature_flags": [
+        "#ifdef USE_BARO"
+      ]
+    },
+    {
+      "name": "rx_pulse_min",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "PWM_PULSE_MIN, PWM_PULSE_MAX",
+      "pgn": "PG_RX_CONFIG",
+      "offset": "rxConfig_t, rx_pulse_min",
+      "feature_flags": []
+    },
+    {
+      "name": "rx_pulse_max",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "PWM_PULSE_MIN, PWM_PULSE_MAX",
+      "pgn": "PG_RX_CONFIG",
+      "offset": "rxConfig_t, rx_pulse_max",
+      "feature_flags": []
+    },
+    {
+      "name": "rssi_channel",
+      "type_expr": "VAR_INT8   | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "0, MAX_SUPPORTED_RC_CHANNEL_COUNT",
+      "pgn": "PG_RX_CONFIG",
+      "offset": "rxConfig_t, rssi_channel",
+      "feature_flags": []
+    },
+    {
+      "name": "rssi_src_frame_errors",
+      "type_expr": "VAR_INT8   | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_RX_CONFIG",
+      "offset": "rxConfig_t, rssi_src_frame_errors",
+      "feature_flags": []
+    },
+    {
+      "name": "rssi_scale",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "RSSI_SCALE_MIN, RSSI_SCALE_MAX",
+      "pgn": "PG_RX_CONFIG",
+      "offset": "rxConfig_t, rssi_scale",
+      "feature_flags": []
+    },
+    {
+      "name": "rssi_offset",
+      "type_expr": "VAR_INT8   | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "-100, 100",
+      "pgn": "PG_RX_CONFIG",
+      "offset": "rxConfig_t, rssi_offset",
+      "feature_flags": []
+    },
+    {
+      "name": "rssi_invert",
+      "type_expr": "VAR_INT8   | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_RX_CONFIG",
+      "offset": "rxConfig_t, rssi_invert",
+      "feature_flags": []
+    },
+    {
+      "name": "rssi_src_frame_lpf_period",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, UINT8_MAX",
+      "pgn": "PG_RX_CONFIG",
+      "offset": "rxConfig_t, rssi_src_frame_lpf_period",
+      "feature_flags": []
+    },
+    {
+      "name": "serialrx_inverted",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_RX_CONFIG",
+      "offset": "rxConfig_t, serialrx_inverted",
+      "feature_flags": [
+        "#ifdef USE_SERIAL_RX"
+      ]
+    },
+    {
+      "name": "serialrx_halfduplex",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_RX_CONFIG",
+      "offset": "rxConfig_t, halfDuplex",
+      "feature_flags": [
+        "#ifdef USE_SERIAL_RX"
+      ]
+    },
+    {
+      "name": "serialrx_pinswap",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_RX_CONFIG",
+      "offset": "rxConfig_t, pinSwap",
+      "feature_flags": [
+        "#ifdef USE_SERIAL_RX",
+        "#ifdef USE_SERIAL_PINSWAP"
+      ]
+    },
+    {
+      "name": "spektrum_sat_bind",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "SPEKTRUM_SAT_BIND_DISABLED, SPEKTRUM_SAT_BIND_MAX",
+      "pgn": "PG_RX_CONFIG",
+      "offset": "rxConfig_t, spektrum_sat_bind",
+      "feature_flags": [
+        "#ifdef USE_SPEKTRUM_BIND"
+      ]
+    },
+    {
+      "name": "spektrum_sat_bind_autoreset",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_RX_CONFIG",
+      "offset": "rxConfig_t, spektrum_sat_bind_autoreset",
+      "feature_flags": [
+        "#ifdef USE_SPEKTRUM_BIND"
+      ]
+    },
+    {
+      "name": "srxl2_unit_id",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "0, 0xf",
+      "pgn": "PG_RX_CONFIG",
+      "offset": "rxConfig_t, srxl2_unit_id",
+      "feature_flags": [
+        "#ifdef USE_SERIALRX_SRXL2"
+      ]
+    },
+    {
+      "name": "srxl2_baud_fast",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_RX_CONFIG",
+      "offset": "rxConfig_t, srxl2_baud_fast",
+      "feature_flags": [
+        "#ifdef USE_SERIALRX_SRXL2"
+      ]
+    },
+    {
+      "name": "sbus_baud_fast",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_RX_CONFIG",
+      "offset": "rxConfig_t, sbus_baud_fast",
+      "feature_flags": [
+        "#if defined(USE_SERIALRX_SBUS)"
+      ]
+    },
+    {
+      "name": "crsf_use_rx_snr",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_RX_CONFIG",
+      "offset": "rxConfig_t, crsf_use_rx_snr",
+      "feature_flags": [
+        "#if defined(USE_SERIALRX_CRSF)"
+      ]
+    },
+    {
+      "name": "crsf_use_negotiated_baud",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_RX_CONFIG",
+      "offset": "rxConfig_t, crsf_use_negotiated_baud",
+      "feature_flags": [
+        "#if defined(USE_SERIALRX_CRSF)",
+        "#if defined(USE_CRSF_V3)"
+      ]
+    },
+    {
+      "name": "rx_spi_protocol",
+      "type_expr": "VAR_UINT8  | HARDWARE_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_RX_SPI",
+      "pgn": "PG_RX_SPI_CONFIG",
+      "offset": "rxSpiConfig_t, rx_spi_protocol",
+      "feature_flags": [
+        "#ifdef USE_RX_SPI"
+      ]
+    },
+    {
+      "name": "rx_spi_bus",
+      "type_expr": "VAR_UINT8  | HARDWARE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, SPIDEV_COUNT",
+      "pgn": "PG_RX_SPI_CONFIG",
+      "offset": "rxSpiConfig_t, spibus",
+      "feature_flags": [
+        "#ifdef USE_RX_SPI"
+      ]
+    },
+    {
+      "name": "rx_spi_led_inversion",
+      "type_expr": "VAR_UINT8  | HARDWARE_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_RX_SPI_CONFIG",
+      "offset": "rxSpiConfig_t, ledInversion",
+      "feature_flags": [
+        "#ifdef USE_RX_SPI"
+      ]
+    },
+    {
+      "name": "adc_device",
+      "type_expr": "VAR_INT8 | HARDWARE_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "0, ADCDEV_COUNT",
+      "pgn": "PG_ADC_CONFIG",
+      "offset": "adcConfig_t, device",
+      "feature_flags": [
+        "#if defined(USE_ADC)"
+      ]
+    },
+    {
+      "name": "adc_vrefint_calibration",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 2000",
+      "pgn": "PG_ADC_CONFIG",
+      "offset": "adcConfig_t, vrefIntCalibration",
+      "feature_flags": [
+        "#if defined(USE_ADC)"
+      ]
+    },
+    {
+      "name": "adc_tempsensor_calibration30",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 2000",
+      "pgn": "PG_ADC_CONFIG",
+      "offset": "adcConfig_t, tempSensorCalibration1",
+      "feature_flags": [
+        "#if defined(USE_ADC)"
+      ]
+    },
+    {
+      "name": "adc_tempsensor_calibration110",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 2000",
+      "pgn": "PG_ADC_CONFIG",
+      "offset": "adcConfig_t, tempSensorCalibration2",
+      "feature_flags": [
+        "#if defined(USE_ADC)"
+      ]
+    },
+    {
+      "name": "input_filtering_mode",
+      "type_expr": "VAR_INT8   | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_PWM_CONFIG",
+      "offset": "pwmConfig_t, inputFilteringMode",
+      "feature_flags": [
+        "#if defined(USE_PWM)"
+      ]
+    },
+    {
+      "name": "freq_input_pull",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_INPUT_PULL_MODE",
+      "pgn": "PG_FREQ_SENSOR_CONFIG",
+      "offset": "freqConfig_t, pullupdn",
+      "feature_flags": [
+        "#if defined(USE_FREQ_SENSOR)"
+      ]
+    },
+    {
+      "name": "freq_input_edge",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_INPUT_EDGE_MODE",
+      "pgn": "PG_FREQ_SENSOR_CONFIG",
+      "offset": "freqConfig_t, polarity",
+      "feature_flags": [
+        "#if defined(USE_FREQ_SENSOR)"
+      ]
+    },
+    {
+      "name": "blackbox_mode",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_BLACKBOX_MODE",
+      "pgn": "PG_BLACKBOX_CONFIG",
+      "offset": "blackboxConfig_t, mode",
+      "feature_flags": [
+        "#ifdef USE_BLACKBOX"
+      ]
+    },
+    {
+      "name": "blackbox_device",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_BLACKBOX_DEVICE",
+      "pgn": "PG_BLACKBOX_CONFIG",
+      "offset": "blackboxConfig_t, device",
+      "feature_flags": [
+        "#ifdef USE_BLACKBOX"
+      ]
+    },
+    {
+      "name": "blackbox_rate_denom",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "1, 8000",
+      "pgn": "PG_BLACKBOX_CONFIG",
+      "offset": "blackboxConfig_t, denom",
+      "feature_flags": [
+        "#ifdef USE_BLACKBOX"
+      ]
+    },
+    {
+      "name": "blackbox_initial_erase_kb",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, UINT16_MAX",
+      "pgn": "PG_BLACKBOX_CONFIG",
+      "offset": "blackboxConfig_t, initialEraseFreeSpaceKiB",
+      "feature_flags": [
+        "#ifdef USE_BLACKBOX",
+        "#ifdef USE_FLASHFS_LOOP"
+      ]
+    },
+    {
+      "name": "blackbox_rolling_erase",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_BLACKBOX_CONFIG",
+      "offset": "blackboxConfig_t, rollingErase",
+      "feature_flags": [
+        "#ifdef USE_BLACKBOX",
+        "#ifdef USE_FLASHFS_LOOP"
+      ]
+    },
+    {
+      "name": "blackbox_grace_period",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 60",
+      "pgn": "PG_BLACKBOX_CONFIG",
+      "offset": "blackboxConfig_t, gracePeriod",
+      "feature_flags": [
+        "#ifdef USE_BLACKBOX"
+      ]
+    },
+    {
+      "name": "min_throttle",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "PWM_SERVO_PULSE_MIN, PWM_SERVO_PULSE_MAX",
+      "pgn": "PG_MOTOR_CONFIG",
+      "offset": "motorConfig_t, minthrottle",
+      "feature_flags": []
+    },
+    {
+      "name": "max_throttle",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "PWM_SERVO_PULSE_MIN, PWM_SERVO_PULSE_MAX",
+      "pgn": "PG_MOTOR_CONFIG",
+      "offset": "motorConfig_t, maxthrottle",
+      "feature_flags": []
+    },
+    {
+      "name": "min_command",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "PWM_SERVO_PULSE_MIN, PWM_SERVO_PULSE_MAX",
+      "pgn": "PG_MOTOR_CONFIG",
+      "offset": "motorConfig_t, mincommand",
+      "feature_flags": []
+    },
+    {
+      "name": "dshot_burst",
+      "type_expr": "VAR_UINT8  | HARDWARE_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON_AUTO",
+      "pgn": "PG_MOTOR_CONFIG",
+      "offset": "motorConfig_t, dev.useBurstDshot",
+      "feature_flags": [
+        "#ifdef USE_DSHOT",
+        "#ifdef USE_DSHOT_DMAR"
+      ]
+    },
+    {
+      "name": "dshot_bitbang",
+      "type_expr": "VAR_UINT8  | HARDWARE_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON_AUTO",
+      "pgn": "PG_MOTOR_CONFIG",
+      "offset": "motorConfig_t, dev.useDshotBitbang",
+      "feature_flags": [
+        "#ifdef USE_DSHOT",
+        "#ifdef USE_DSHOT_BITBANG"
+      ]
+    },
+    {
+      "name": "dshot_bitbang_timer",
+      "type_expr": "VAR_UINT8  | HARDWARE_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_DSHOT_BITBANGED_TIMER",
+      "pgn": "PG_MOTOR_CONFIG",
+      "offset": "motorConfig_t, dev.useDshotBitbangedTimer",
+      "feature_flags": [
+        "#ifdef USE_DSHOT",
+        "#ifdef USE_DSHOT_BITBANG"
+      ]
+    },
+    {
+      "name": "failsafe_delay",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "PERIOD_RXDATA_RECOVERY / MILLIS_PER_TENTH_SECOND, 200",
+      "pgn": "PG_FAILSAFE_CONFIG",
+      "offset": "failsafeConfig_t, failsafe_delay",
+      "feature_flags": []
+    },
+    {
+      "name": "failsafe_off_delay",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 200",
+      "pgn": "PG_FAILSAFE_CONFIG",
+      "offset": "failsafeConfig_t, failsafe_off_delay",
+      "feature_flags": []
+    },
+    {
+      "name": "failsafe_throttle",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "PWM_PULSE_MIN, PWM_PULSE_MAX",
+      "pgn": "PG_FAILSAFE_CONFIG",
+      "offset": "failsafeConfig_t, failsafe_throttle",
+      "feature_flags": []
+    },
+    {
+      "name": "failsafe_switch_mode",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_FAILSAFE_SWITCH_MODE",
+      "pgn": "PG_FAILSAFE_CONFIG",
+      "offset": "failsafeConfig_t, failsafe_switch_mode",
+      "feature_flags": []
+    },
+    {
+      "name": "failsafe_throttle_low_delay",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 300",
+      "pgn": "PG_FAILSAFE_CONFIG",
+      "offset": "failsafeConfig_t, failsafe_throttle_low_delay",
+      "feature_flags": []
+    },
+    {
+      "name": "failsafe_procedure",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_FAILSAFE",
+      "pgn": "PG_FAILSAFE_CONFIG",
+      "offset": "failsafeConfig_t, failsafe_procedure",
+      "feature_flags": []
+    },
+    {
+      "name": "failsafe_recovery_delay",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 200",
+      "pgn": "PG_FAILSAFE_CONFIG",
+      "offset": "failsafeConfig_t, failsafe_recovery_delay",
+      "feature_flags": []
+    },
+    {
+      "name": "failsafe_stick_threshold",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 50",
+      "pgn": "PG_FAILSAFE_CONFIG",
+      "offset": "failsafeConfig_t, failsafe_stick_threshold",
+      "feature_flags": []
+    },
+    {
+      "name": "align_board_roll",
+      "type_expr": "VAR_INT16  | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "-180, 360",
+      "pgn": "PG_BOARD_ALIGNMENT",
+      "offset": "boardAlignment_t, rollDegrees",
+      "feature_flags": []
+    },
+    {
+      "name": "align_board_pitch",
+      "type_expr": "VAR_INT16  | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "-180, 360",
+      "pgn": "PG_BOARD_ALIGNMENT",
+      "offset": "boardAlignment_t, pitchDegrees",
+      "feature_flags": []
+    },
+    {
+      "name": "align_board_yaw",
+      "type_expr": "VAR_INT16  | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "-180, 360",
+      "pgn": "PG_BOARD_ALIGNMENT",
+      "offset": "boardAlignment_t, yawDegrees",
+      "feature_flags": []
+    },
+    {
+      "name": "bat_profile",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, BATTERY_PROFILE_COUNT - 1",
+      "pgn": "PG_BATTERY_CONFIG",
+      "offset": "batteryConfig_t, batteryProfile",
+      "feature_flags": []
+    },
+    {
+      "name": "vbat_max_cell_voltage",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "VBAT_CELL_VOTAGE_RANGE_MIN, VBAT_CELL_VOTAGE_RANGE_MAX",
+      "pgn": "PG_BATTERY_CONFIG",
+      "offset": "batteryConfig_t, vbatmaxcellvoltage",
+      "feature_flags": []
+    },
+    {
+      "name": "vbat_full_cell_voltage",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "VBAT_CELL_VOTAGE_RANGE_MIN, VBAT_CELL_VOTAGE_RANGE_MAX",
+      "pgn": "PG_BATTERY_CONFIG",
+      "offset": "batteryConfig_t, vbatfullcellvoltage",
+      "feature_flags": []
+    },
+    {
+      "name": "vbat_min_cell_voltage",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "VBAT_CELL_VOTAGE_RANGE_MIN, VBAT_CELL_VOTAGE_RANGE_MAX",
+      "pgn": "PG_BATTERY_CONFIG",
+      "offset": "batteryConfig_t, vbatmincellvoltage",
+      "feature_flags": []
+    },
+    {
+      "name": "vbat_warning_cell_voltage",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "VBAT_CELL_VOTAGE_RANGE_MIN, VBAT_CELL_VOTAGE_RANGE_MAX",
+      "pgn": "PG_BATTERY_CONFIG",
+      "offset": "batteryConfig_t, vbatwarningcellvoltage",
+      "feature_flags": []
+    },
+    {
+      "name": "vbat_hysteresis",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_BATTERY_CONFIG",
+      "offset": "batteryConfig_t, vbathysteresis",
+      "feature_flags": []
+    },
+    {
+      "name": "current_meter",
+      "type_expr": "VAR_UINT8  | HARDWARE_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_CURRENT_METER",
+      "pgn": "PG_BATTERY_CONFIG",
+      "offset": "batteryConfig_t, currentMeterSource",
+      "feature_flags": []
+    },
+    {
+      "name": "battery_meter",
+      "type_expr": "VAR_UINT8  | HARDWARE_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_VOLTAGE_METER",
+      "pgn": "PG_BATTERY_CONFIG",
+      "offset": "batteryConfig_t, voltageMeterSource",
+      "feature_flags": []
+    },
+    {
+      "name": "vbat_detect_cell_voltage",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 2000",
+      "pgn": "PG_BATTERY_CONFIG",
+      "offset": "batteryConfig_t, vbatnotpresentcellvoltage",
+      "feature_flags": []
+    },
+    {
+      "name": "use_vbat_alerts",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_BATTERY_CONFIG",
+      "offset": "batteryConfig_t, useVoltageAlerts",
+      "feature_flags": []
+    },
+    {
+      "name": "use_cbat_alerts",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_BATTERY_CONFIG",
+      "offset": "batteryConfig_t, useConsumptionAlerts",
+      "feature_flags": []
+    },
+    {
+      "name": "cbat_alert_percent",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 100",
+      "pgn": "PG_BATTERY_CONFIG",
+      "offset": "batteryConfig_t, consumptionWarningPercentage",
+      "feature_flags": []
+    },
+    {
+      "name": "vbat_cutoff_percent",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 100",
+      "pgn": "PG_BATTERY_CONFIG",
+      "offset": "batteryConfig_t, lvcPercentage",
+      "feature_flags": []
+    },
+    {
+      "name": "battery_cell_count",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 24",
+      "pgn": "PG_BATTERY_CONFIG",
+      "offset": "batteryConfig_t, batteryCellCount",
+      "feature_flags": []
+    },
+    {
+      "name": "vbat_lpf_hz",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, UINT8_MAX",
+      "pgn": "PG_BATTERY_CONFIG",
+      "offset": "batteryConfig_t, vbatLpfHz",
+      "feature_flags": []
+    },
+    {
+      "name": "ibat_lpf_hz",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, UINT8_MAX",
+      "pgn": "PG_BATTERY_CONFIG",
+      "offset": "batteryConfig_t, ibatLpfHz",
+      "feature_flags": []
+    },
+    {
+      "name": "vbat_duration_for_warning",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "0, 150",
+      "pgn": "PG_BATTERY_CONFIG",
+      "offset": "batteryConfig_t, vbatDurationForWarning",
+      "feature_flags": []
+    },
+    {
+      "name": "vbat_duration_for_critical",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "0, 150",
+      "pgn": "PG_BATTERY_CONFIG",
+      "offset": "batteryConfig_t, vbatDurationForCritical",
+      "feature_flags": []
+    },
+    {
+      "name": "vbat_update_hz",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "10, 1000",
+      "pgn": "PG_BATTERY_CONFIG",
+      "offset": "batteryConfig_t, vbatUpdateHz",
+      "feature_flags": []
+    },
+    {
+      "name": "ibat_update_hz",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "10, 1000",
+      "pgn": "PG_BATTERY_CONFIG",
+      "offset": "batteryConfig_t, ibatUpdateHz",
+      "feature_flags": []
+    },
+    {
+      "name": "beeper_inversion",
+      "type_expr": "VAR_UINT8  | HARDWARE_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_BEEPER_DEV_CONFIG",
+      "offset": "beeperDevConfig_t, isInverted",
+      "feature_flags": [
+        "#ifdef USE_BEEPER"
+      ]
+    },
+    {
+      "name": "beeper_od",
+      "type_expr": "VAR_UINT8  | HARDWARE_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_BEEPER_DEV_CONFIG",
+      "offset": "beeperDevConfig_t, isOpenDrain",
+      "feature_flags": [
+        "#ifdef USE_BEEPER"
+      ]
+    },
+    {
+      "name": "beeper_frequency",
+      "type_expr": "VAR_INT16  | HARDWARE_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "0, 16000",
+      "pgn": "PG_BEEPER_DEV_CONFIG",
+      "offset": "beeperDevConfig_t, frequency",
+      "feature_flags": [
+        "#ifdef USE_BEEPER"
+      ]
+    },
+    {
+      "name": "beeper_dshot_beacon_tone",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "1, DSHOT_CMD_BEACON5",
+      "pgn": "PG_BEEPER_CONFIG",
+      "offset": "beeperConfig_t, dshotBeaconTone",
+      "feature_flags": [
+        "#ifdef USE_BEEPER",
+        "#ifdef USE_DSHOT"
+      ]
+    },
+    {
+      "name": "main_rotor_dir",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_ROTATION_DIR",
+      "pgn": "PG_GENERIC_MIXER_CONFIG",
+      "offset": "mixerConfig_t, main_rotor_dir",
+      "feature_flags": []
+    },
+    {
+      "name": "tail_rotor_mode",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_TAIL_MODE",
+      "pgn": "PG_GENERIC_MIXER_CONFIG",
+      "offset": "mixerConfig_t, tail_rotor_mode",
+      "feature_flags": []
+    },
+    {
+      "name": "tail_motor_idle",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_GENERIC_MIXER_CONFIG",
+      "offset": "mixerConfig_t, tail_motor_idle",
+      "feature_flags": []
+    },
+    {
+      "name": "tail_center_trim",
+      "type_expr": "VAR_INT16  | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "-1000, 1000",
+      "pgn": "PG_GENERIC_MIXER_CONFIG",
+      "offset": "mixerConfig_t, tail_center_trim",
+      "feature_flags": []
+    },
+    {
+      "name": "swash_type",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_SWASH_TYPE",
+      "pgn": "PG_GENERIC_MIXER_CONFIG",
+      "offset": "mixerConfig_t, swash_type",
+      "feature_flags": []
+    },
+    {
+      "name": "swash_ring",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 100",
+      "pgn": "PG_GENERIC_MIXER_CONFIG",
+      "offset": "mixerConfig_t, swash_ring",
+      "feature_flags": []
+    },
+    {
+      "name": "swash_phase",
+      "type_expr": "VAR_INT16  | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "-1800, 1800",
+      "pgn": "PG_GENERIC_MIXER_CONFIG",
+      "offset": "mixerConfig_t, swash_phase",
+      "feature_flags": []
+    },
+    {
+      "name": "swash_roll_trim",
+      "type_expr": "VAR_INT16  | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "-1000, 1000",
+      "pgn": "PG_GENERIC_MIXER_CONFIG",
+      "offset": "mixerConfig_t, swash_trim[0]",
+      "feature_flags": []
+    },
+    {
+      "name": "swash_pitch_trim",
+      "type_expr": "VAR_INT16  | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "-1000, 1000",
+      "pgn": "PG_GENERIC_MIXER_CONFIG",
+      "offset": "mixerConfig_t, swash_trim[1]",
+      "feature_flags": []
+    },
+    {
+      "name": "swash_collective_trim",
+      "type_expr": "VAR_INT16  | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "-1000, 1000",
+      "pgn": "PG_GENERIC_MIXER_CONFIG",
+      "offset": "mixerConfig_t, swash_trim[2]",
+      "feature_flags": []
+    },
+    {
+      "name": "swash_pitch_limit",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 3000",
+      "pgn": "PG_GENERIC_MIXER_CONFIG",
+      "offset": "mixerConfig_t, swash_pitch_limit",
+      "feature_flags": []
+    },
+    {
+      "name": "swash_tta_precomp",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_GENERIC_MIXER_CONFIG",
+      "offset": "mixerConfig_t, swash_tta_precomp",
+      "feature_flags": []
+    },
+    {
+      "name": "swash_geo_correction",
+      "type_expr": "VAR_INT8   | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "-125, 125",
+      "pgn": "PG_GENERIC_MIXER_CONFIG",
+      "offset": "mixerConfig_t, swash_geo_correction",
+      "feature_flags": []
+    },
+    {
+      "name": "collective_tilt_correction_pos",
+      "type_expr": "VAR_INT8 | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "-100, 100",
+      "pgn": "PG_GENERIC_MIXER_CONFIG",
+      "offset": "mixerConfig_t, collective_tilt_correction_pos",
+      "feature_flags": []
+    },
+    {
+      "name": "collective_tilt_correction_neg",
+      "type_expr": "VAR_INT8 | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "-100, 100",
+      "pgn": "PG_GENERIC_MIXER_CONFIG",
+      "offset": "mixerConfig_t, collective_tilt_correction_neg",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_mode",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_GOVERNOR_MODE",
+      "pgn": "PG_GOVERNOR_CONFIG",
+      "offset": "governorConfig_t, gov_mode",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_throttle_type",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_GOVERNOR_THROTTLE_TYPE",
+      "pgn": "PG_GOVERNOR_CONFIG",
+      "offset": "governorConfig_t, gov_throttle_type",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_startup_time",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 600",
+      "pgn": "PG_GOVERNOR_CONFIG",
+      "offset": "governorConfig_t, gov_startup_time",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_spoolup_time",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 600",
+      "pgn": "PG_GOVERNOR_CONFIG",
+      "offset": "governorConfig_t, gov_spoolup_time",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_tracking_time",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 600",
+      "pgn": "PG_GOVERNOR_CONFIG",
+      "offset": "governorConfig_t, gov_tracking_time",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_recovery_time",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 600",
+      "pgn": "PG_GOVERNOR_CONFIG",
+      "offset": "governorConfig_t, gov_recovery_time",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_spooldown_time",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 600",
+      "pgn": "PG_GOVERNOR_CONFIG",
+      "offset": "governorConfig_t, gov_spooldown_time",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_throttle_hold_timeout",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_GOVERNOR_CONFIG",
+      "offset": "governorConfig_t, gov_throttle_hold_timeout",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_autorotation_timeout",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_GOVERNOR_CONFIG",
+      "offset": "governorConfig_t, gov_autorotation_timeout",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_handover_throttle",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "10, 100",
+      "pgn": "PG_GOVERNOR_CONFIG",
+      "offset": "governorConfig_t, gov_handover_throttle",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_idle_throttle",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_GOVERNOR_CONFIG",
+      "offset": "governorConfig_t, gov_idle_throttle",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_auto_throttle",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_GOVERNOR_CONFIG",
+      "offset": "governorConfig_t, gov_auto_throttle",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_pwr_filter",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_GOVERNOR_CONFIG",
+      "offset": "governorConfig_t, gov_pwr_filter",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_rpm_filter",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_GOVERNOR_CONFIG",
+      "offset": "governorConfig_t, gov_rpm_filter",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_tta_filter",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_GOVERNOR_CONFIG",
+      "offset": "governorConfig_t, gov_tta_filter",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_ff_filter",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_GOVERNOR_CONFIG",
+      "offset": "governorConfig_t, gov_ff_filter",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_d_filter",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_GOVERNOR_CONFIG",
+      "offset": "governorConfig_t, gov_d_filter",
+      "feature_flags": []
+    },
+    {
+      "name": "rateprofile_name",
+      "type_expr": "VAR_UINT8  | PROFILE_RATE_VALUE | MODE_STRING",
+      "config_kind": "string",
+      "config_expr": "1, MAX_RATE_PROFILE_NAME_LENGTH, STRING_FLAGS_NONE",
+      "pgn": "PG_CONTROL_RATE_PROFILES",
+      "offset": "controlRateConfig_t, profileName",
+      "feature_flags": [
+        "#ifdef USE_PROFILE_NAMES"
+      ]
+    },
+    {
+      "name": "roll_rc_rate",
+      "type_expr": "VAR_UINT8  | PROFILE_RATE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "1, CONTROL_RATE_CONFIG_RC_RATES_MAX",
+      "pgn": "PG_CONTROL_RATE_PROFILES",
+      "offset": "controlRateConfig_t, rcRates[FD_ROLL]",
+      "feature_flags": []
+    },
+    {
+      "name": "pitch_rc_rate",
+      "type_expr": "VAR_UINT8  | PROFILE_RATE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "1, CONTROL_RATE_CONFIG_RC_RATES_MAX",
+      "pgn": "PG_CONTROL_RATE_PROFILES",
+      "offset": "controlRateConfig_t, rcRates[FD_PITCH]",
+      "feature_flags": []
+    },
+    {
+      "name": "yaw_rc_rate",
+      "type_expr": "VAR_UINT8  | PROFILE_RATE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "1, CONTROL_RATE_CONFIG_RC_RATES_MAX",
+      "pgn": "PG_CONTROL_RATE_PROFILES",
+      "offset": "controlRateConfig_t, rcRates[FD_YAW]",
+      "feature_flags": []
+    },
+    {
+      "name": "collective_rc_rate",
+      "type_expr": "VAR_UINT8  | PROFILE_RATE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "1, CONTROL_RATE_CONFIG_RC_RATES_MAX",
+      "pgn": "PG_CONTROL_RATE_PROFILES",
+      "offset": "controlRateConfig_t, rcRates[FD_COLL]",
+      "feature_flags": []
+    },
+    {
+      "name": "roll_expo",
+      "type_expr": "VAR_UINT8  | PROFILE_RATE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, CONTROL_RATE_CONFIG_RC_EXPO_MAX",
+      "pgn": "PG_CONTROL_RATE_PROFILES",
+      "offset": "controlRateConfig_t, rcExpo[FD_ROLL]",
+      "feature_flags": []
+    },
+    {
+      "name": "pitch_expo",
+      "type_expr": "VAR_UINT8  | PROFILE_RATE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, CONTROL_RATE_CONFIG_RC_EXPO_MAX",
+      "pgn": "PG_CONTROL_RATE_PROFILES",
+      "offset": "controlRateConfig_t, rcExpo[FD_PITCH]",
+      "feature_flags": []
+    },
+    {
+      "name": "yaw_expo",
+      "type_expr": "VAR_UINT8  | PROFILE_RATE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, CONTROL_RATE_CONFIG_RC_EXPO_MAX",
+      "pgn": "PG_CONTROL_RATE_PROFILES",
+      "offset": "controlRateConfig_t, rcExpo[FD_YAW]",
+      "feature_flags": []
+    },
+    {
+      "name": "collective_expo",
+      "type_expr": "VAR_UINT8  | PROFILE_RATE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, CONTROL_RATE_CONFIG_RC_EXPO_MAX",
+      "pgn": "PG_CONTROL_RATE_PROFILES",
+      "offset": "controlRateConfig_t, rcExpo[FD_COLL]",
+      "feature_flags": []
+    },
+    {
+      "name": "roll_srate",
+      "type_expr": "VAR_UINT8  | PROFILE_RATE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, CONTROL_RATE_CONFIG_SUPER_RATE_MAX",
+      "pgn": "PG_CONTROL_RATE_PROFILES",
+      "offset": "controlRateConfig_t, sRates[FD_ROLL]",
+      "feature_flags": []
+    },
+    {
+      "name": "pitch_srate",
+      "type_expr": "VAR_UINT8  | PROFILE_RATE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, CONTROL_RATE_CONFIG_SUPER_RATE_MAX",
+      "pgn": "PG_CONTROL_RATE_PROFILES",
+      "offset": "controlRateConfig_t, sRates[FD_PITCH]",
+      "feature_flags": []
+    },
+    {
+      "name": "yaw_srate",
+      "type_expr": "VAR_UINT8  | PROFILE_RATE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, CONTROL_RATE_CONFIG_SUPER_RATE_MAX",
+      "pgn": "PG_CONTROL_RATE_PROFILES",
+      "offset": "controlRateConfig_t, sRates[FD_YAW]",
+      "feature_flags": []
+    },
+    {
+      "name": "collective_srate",
+      "type_expr": "VAR_UINT8  | PROFILE_RATE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, CONTROL_RATE_CONFIG_SUPER_RATE_MAX",
+      "pgn": "PG_CONTROL_RATE_PROFILES",
+      "offset": "controlRateConfig_t, sRates[FD_COLL]",
+      "feature_flags": []
+    },
+    {
+      "name": "roll_accel_limit",
+      "type_expr": "VAR_UINT16 | PROFILE_RATE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 50000",
+      "pgn": "PG_CONTROL_RATE_PROFILES",
+      "offset": "controlRateConfig_t, accel_limit[FD_ROLL]",
+      "feature_flags": []
+    },
+    {
+      "name": "pitch_accel_limit",
+      "type_expr": "VAR_UINT16 | PROFILE_RATE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 50000",
+      "pgn": "PG_CONTROL_RATE_PROFILES",
+      "offset": "controlRateConfig_t, accel_limit[FD_PITCH]",
+      "feature_flags": []
+    },
+    {
+      "name": "yaw_accel_limit",
+      "type_expr": "VAR_UINT16 | PROFILE_RATE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 50000",
+      "pgn": "PG_CONTROL_RATE_PROFILES",
+      "offset": "controlRateConfig_t, accel_limit[FD_YAW]",
+      "feature_flags": []
+    },
+    {
+      "name": "collective_accel_limit",
+      "type_expr": "VAR_UINT16 | PROFILE_RATE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 50000",
+      "pgn": "PG_CONTROL_RATE_PROFILES",
+      "offset": "controlRateConfig_t, accel_limit[FD_COLL]",
+      "feature_flags": []
+    },
+    {
+      "name": "roll_level_expo",
+      "type_expr": "VAR_UINT8  | PROFILE_RATE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, CONTROL_RATE_CONFIG_RC_EXPO_MAX",
+      "pgn": "PG_CONTROL_RATE_PROFILES",
+      "offset": "controlRateConfig_t, levelExpo[FD_ROLL]",
+      "feature_flags": []
+    },
+    {
+      "name": "pitch_level_expo",
+      "type_expr": "VAR_UINT8  | PROFILE_RATE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, CONTROL_RATE_CONFIG_RC_EXPO_MAX",
+      "pgn": "PG_CONTROL_RATE_PROFILES",
+      "offset": "controlRateConfig_t, levelExpo[FD_PITCH]",
+      "feature_flags": []
+    },
+    {
+      "name": "roll_response",
+      "type_expr": "VAR_UINT8  | PROFILE_RATE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_CONTROL_RATE_PROFILES",
+      "offset": "controlRateConfig_t, response_time[FD_ROLL]",
+      "feature_flags": []
+    },
+    {
+      "name": "pitch_response",
+      "type_expr": "VAR_UINT8  | PROFILE_RATE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_CONTROL_RATE_PROFILES",
+      "offset": "controlRateConfig_t, response_time[FD_PITCH]",
+      "feature_flags": []
+    },
+    {
+      "name": "yaw_response",
+      "type_expr": "VAR_UINT8  | PROFILE_RATE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_CONTROL_RATE_PROFILES",
+      "offset": "controlRateConfig_t, response_time[FD_YAW]",
+      "feature_flags": []
+    },
+    {
+      "name": "collective_response",
+      "type_expr": "VAR_UINT8  | PROFILE_RATE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_CONTROL_RATE_PROFILES",
+      "offset": "controlRateConfig_t, response_time[FD_COLL]",
+      "feature_flags": []
+    },
+    {
+      "name": "cyclic_ring",
+      "type_expr": "VAR_UINT8  | PROFILE_RATE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_CONTROL_RATE_PROFILES",
+      "offset": "controlRateConfig_t, cyclic_ring",
+      "feature_flags": []
+    },
+    {
+      "name": "cyclic_polar",
+      "type_expr": "VAR_UINT8  | PROFILE_RATE_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_CONTROL_RATE_PROFILES",
+      "offset": "controlRateConfig_t, cyclic_polar",
+      "feature_flags": []
+    },
+    {
+      "name": "yaw_dynamic_ceiling_gain",
+      "type_expr": "VAR_UINT8  | PROFILE_RATE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_CONTROL_RATE_PROFILES",
+      "offset": "controlRateConfig_t, yaw_dynamic_ceiling_gain",
+      "feature_flags": []
+    },
+    {
+      "name": "yaw_dynamic_deadband_gain",
+      "type_expr": "VAR_UINT8  | PROFILE_RATE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_CONTROL_RATE_PROFILES",
+      "offset": "controlRateConfig_t, yaw_dynamic_deadband_gain",
+      "feature_flags": []
+    },
+    {
+      "name": "yaw_dynamic_deadband_filter",
+      "type_expr": "VAR_UINT8  | PROFILE_RATE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_CONTROL_RATE_PROFILES",
+      "offset": "controlRateConfig_t, yaw_dynamic_deadband_filter",
+      "feature_flags": []
+    },
+    {
+      "name": "yaw_dynamic_deadband_cutoff",
+      "type_expr": "VAR_UINT8  | PROFILE_RATE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_CONTROL_RATE_PROFILES",
+      "offset": "controlRateConfig_t, yaw_dynamic_deadband_cutoff",
+      "feature_flags": []
+    },
+    {
+      "name": "reboot_character",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "48, 126",
+      "pgn": "PG_SERIAL_CONFIG",
+      "offset": "serialConfig_t, reboot_character",
+      "feature_flags": []
+    },
+    {
+      "name": "serial_update_rate_hz",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "100, 2000",
+      "pgn": "PG_SERIAL_CONFIG",
+      "offset": "serialConfig_t, serial_update_rate_hz",
+      "feature_flags": []
+    },
+    {
+      "name": "imu_dcm_kp",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 32000",
+      "pgn": "PG_IMU_CONFIG",
+      "offset": "imuConfig_t, dcm_kp",
+      "feature_flags": []
+    },
+    {
+      "name": "imu_dcm_ki",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 32000",
+      "pgn": "PG_IMU_CONFIG",
+      "offset": "imuConfig_t, dcm_ki",
+      "feature_flags": []
+    },
+    {
+      "name": "auto_disarm_delay",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 60",
+      "pgn": "PG_ARMING_CONFIG",
+      "offset": "armingConfig_t, auto_disarm_delay",
+      "feature_flags": []
+    },
+    {
+      "name": "gyro_cal_on_first_arm",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_ARMING_CONFIG",
+      "offset": "armingConfig_t, gyro_cal_on_first_arm",
+      "feature_flags": []
+    },
+    {
+      "name": "pwr_on_arm_grace",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 30",
+      "pgn": "PG_ARMING_CONFIG",
+      "offset": "armingConfig_t, power_on_arming_grace_time",
+      "feature_flags": []
+    },
+    {
+      "name": "enable_stick_arming",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_ARMING_CONFIG",
+      "offset": "armingConfig_t, enable_stick_arming",
+      "feature_flags": []
+    },
+    {
+      "name": "enable_stick_commands",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_ARMING_CONFIG",
+      "offset": "armingConfig_t, enable_stick_commands",
+      "feature_flags": []
+    },
+    {
+      "name": "wiggle_strength",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 100",
+      "pgn": "PG_ARMING_CONFIG",
+      "offset": "armingConfig_t, wiggle_strength",
+      "feature_flags": []
+    },
+    {
+      "name": "wiggle_frequency",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "2, 50",
+      "pgn": "PG_ARMING_CONFIG",
+      "offset": "armingConfig_t, wiggle_frequency",
+      "feature_flags": []
+    },
+    {
+      "name": "gps_provider",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_GPS_PROVIDER",
+      "pgn": "PG_GPS_CONFIG",
+      "offset": "gpsConfig_t, provider",
+      "feature_flags": [
+        "#ifdef USE_GPS"
+      ]
+    },
+    {
+      "name": "gps_sbas_mode",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_GPS_SBAS_MODE",
+      "pgn": "PG_GPS_CONFIG",
+      "offset": "gpsConfig_t, sbasMode",
+      "feature_flags": [
+        "#ifdef USE_GPS"
+      ]
+    },
+    {
+      "name": "gps_sbas_integrity",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_GPS_CONFIG",
+      "offset": "gpsConfig_t, sbas_integrity",
+      "feature_flags": [
+        "#ifdef USE_GPS"
+      ]
+    },
+    {
+      "name": "gps_auto_config",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_GPS_CONFIG",
+      "offset": "gpsConfig_t, autoConfig",
+      "feature_flags": [
+        "#ifdef USE_GPS"
+      ]
+    },
+    {
+      "name": "gps_auto_baud",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_GPS_CONFIG",
+      "offset": "gpsConfig_t, autoBaud",
+      "feature_flags": [
+        "#ifdef USE_GPS"
+      ]
+    },
+    {
+      "name": "gps_ublox_use_galileo",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_GPS_CONFIG",
+      "offset": "gpsConfig_t, gps_ublox_use_galileo",
+      "feature_flags": [
+        "#ifdef USE_GPS"
+      ]
+    },
+    {
+      "name": "gps_ublox_mode",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_GPS_UBLOX_MODE",
+      "pgn": "PG_GPS_CONFIG",
+      "offset": "gpsConfig_t, gps_ublox_mode",
+      "feature_flags": [
+        "#ifdef USE_GPS"
+      ]
+    },
+    {
+      "name": "gps_set_home_point_once",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_GPS_CONFIG",
+      "offset": "gpsConfig_t, gps_set_home_point_once",
+      "feature_flags": [
+        "#ifdef USE_GPS"
+      ]
+    },
+    {
+      "name": "gps_use_3d_speed",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_GPS_CONFIG",
+      "offset": "gpsConfig_t, gps_use_3d_speed",
+      "feature_flags": [
+        "#ifdef USE_GPS"
+      ]
+    },
+    {
+      "name": "gps_rescue_angle",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 200",
+      "pgn": "PG_GPS_RESCUE",
+      "offset": "gpsRescueConfig_t, angle",
+      "feature_flags": [
+        "#ifdef USE_GPS",
+        "#ifdef USE_GPS_RESCUE"
+      ]
+    },
+    {
+      "name": "gps_rescue_alt_buffer",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 100",
+      "pgn": "PG_GPS_RESCUE",
+      "offset": "gpsRescueConfig_t, rescueAltitudeBufferM",
+      "feature_flags": [
+        "#ifdef USE_GPS",
+        "#ifdef USE_GPS_RESCUE"
+      ]
+    },
+    {
+      "name": "gps_rescue_initial_alt",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "20, 100",
+      "pgn": "PG_GPS_RESCUE",
+      "offset": "gpsRescueConfig_t, initialAltitudeM",
+      "feature_flags": [
+        "#ifdef USE_GPS",
+        "#ifdef USE_GPS_RESCUE"
+      ]
+    },
+    {
+      "name": "gps_rescue_descent_dist",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "30, 500",
+      "pgn": "PG_GPS_RESCUE",
+      "offset": "gpsRescueConfig_t, descentDistanceM",
+      "feature_flags": [
+        "#ifdef USE_GPS",
+        "#ifdef USE_GPS_RESCUE"
+      ]
+    },
+    {
+      "name": "gps_rescue_landing_alt",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "3, 10",
+      "pgn": "PG_GPS_RESCUE",
+      "offset": "gpsRescueConfig_t, targetLandingAltitudeM",
+      "feature_flags": [
+        "#ifdef USE_GPS",
+        "#ifdef USE_GPS_RESCUE"
+      ]
+    },
+    {
+      "name": "gps_rescue_landing_dist",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "5, 15",
+      "pgn": "PG_GPS_RESCUE",
+      "offset": "gpsRescueConfig_t, targetLandingDistanceM",
+      "feature_flags": [
+        "#ifdef USE_GPS",
+        "#ifdef USE_GPS_RESCUE"
+      ]
+    },
+    {
+      "name": "gps_rescue_ground_speed",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "30, 3000",
+      "pgn": "PG_GPS_RESCUE",
+      "offset": "gpsRescueConfig_t, rescueGroundspeed",
+      "feature_flags": [
+        "#ifdef USE_GPS",
+        "#ifdef USE_GPS_RESCUE"
+      ]
+    },
+    {
+      "name": "gps_rescue_throttle_p",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 500",
+      "pgn": "PG_GPS_RESCUE",
+      "offset": "gpsRescueConfig_t, throttleP",
+      "feature_flags": [
+        "#ifdef USE_GPS",
+        "#ifdef USE_GPS_RESCUE"
+      ]
+    },
+    {
+      "name": "gps_rescue_throttle_i",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 500",
+      "pgn": "PG_GPS_RESCUE",
+      "offset": "gpsRescueConfig_t, throttleI",
+      "feature_flags": [
+        "#ifdef USE_GPS",
+        "#ifdef USE_GPS_RESCUE"
+      ]
+    },
+    {
+      "name": "gps_rescue_throttle_d",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 500",
+      "pgn": "PG_GPS_RESCUE",
+      "offset": "gpsRescueConfig_t, throttleD",
+      "feature_flags": [
+        "#ifdef USE_GPS",
+        "#ifdef USE_GPS_RESCUE"
+      ]
+    },
+    {
+      "name": "gps_rescue_velocity_p",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 500",
+      "pgn": "PG_GPS_RESCUE",
+      "offset": "gpsRescueConfig_t, velP",
+      "feature_flags": [
+        "#ifdef USE_GPS",
+        "#ifdef USE_GPS_RESCUE"
+      ]
+    },
+    {
+      "name": "gps_rescue_velocity_i",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 500",
+      "pgn": "PG_GPS_RESCUE",
+      "offset": "gpsRescueConfig_t, velI",
+      "feature_flags": [
+        "#ifdef USE_GPS",
+        "#ifdef USE_GPS_RESCUE"
+      ]
+    },
+    {
+      "name": "gps_rescue_velocity_d",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 500",
+      "pgn": "PG_GPS_RESCUE",
+      "offset": "gpsRescueConfig_t, velD",
+      "feature_flags": [
+        "#ifdef USE_GPS",
+        "#ifdef USE_GPS_RESCUE"
+      ]
+    },
+    {
+      "name": "gps_rescue_yaw_p",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 500",
+      "pgn": "PG_GPS_RESCUE",
+      "offset": "gpsRescueConfig_t, yawP",
+      "feature_flags": [
+        "#ifdef USE_GPS",
+        "#ifdef USE_GPS_RESCUE"
+      ]
+    },
+    {
+      "name": "gps_rescue_throttle_min",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "1000, 2000",
+      "pgn": "PG_GPS_RESCUE",
+      "offset": "gpsRescueConfig_t, throttleMin",
+      "feature_flags": [
+        "#ifdef USE_GPS",
+        "#ifdef USE_GPS_RESCUE"
+      ]
+    },
+    {
+      "name": "gps_rescue_throttle_max",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "1000, 2000",
+      "pgn": "PG_GPS_RESCUE",
+      "offset": "gpsRescueConfig_t, throttleMax",
+      "feature_flags": [
+        "#ifdef USE_GPS",
+        "#ifdef USE_GPS_RESCUE"
+      ]
+    },
+    {
+      "name": "gps_rescue_ascend_rate",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "100, 2500",
+      "pgn": "PG_GPS_RESCUE",
+      "offset": "gpsRescueConfig_t, ascendRate",
+      "feature_flags": [
+        "#ifdef USE_GPS",
+        "#ifdef USE_GPS_RESCUE"
+      ]
+    },
+    {
+      "name": "gps_rescue_descend_rate",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "100, 500",
+      "pgn": "PG_GPS_RESCUE",
+      "offset": "gpsRescueConfig_t, descendRate",
+      "feature_flags": [
+        "#ifdef USE_GPS",
+        "#ifdef USE_GPS_RESCUE"
+      ]
+    },
+    {
+      "name": "gps_rescue_throttle_hover",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "1000, 2000",
+      "pgn": "PG_GPS_RESCUE",
+      "offset": "gpsRescueConfig_t, throttleHover",
+      "feature_flags": [
+        "#ifdef USE_GPS",
+        "#ifdef USE_GPS_RESCUE"
+      ]
+    },
+    {
+      "name": "gps_rescue_sanity_checks",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_GPS_RESCUE_SANITY_CHECK",
+      "pgn": "PG_GPS_RESCUE",
+      "offset": "gpsRescueConfig_t, sanityChecks",
+      "feature_flags": [
+        "#ifdef USE_GPS",
+        "#ifdef USE_GPS_RESCUE"
+      ]
+    },
+    {
+      "name": "gps_rescue_min_sats",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "5, 50",
+      "pgn": "PG_GPS_RESCUE",
+      "offset": "gpsRescueConfig_t, minSats",
+      "feature_flags": [
+        "#ifdef USE_GPS",
+        "#ifdef USE_GPS_RESCUE"
+      ]
+    },
+    {
+      "name": "gps_rescue_min_dth",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "50, 1000",
+      "pgn": "PG_GPS_RESCUE",
+      "offset": "gpsRescueConfig_t, minRescueDth",
+      "feature_flags": [
+        "#ifdef USE_GPS",
+        "#ifdef USE_GPS_RESCUE"
+      ]
+    },
+    {
+      "name": "gps_rescue_allow_arming_without_fix",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_GPS_RESCUE",
+      "offset": "gpsRescueConfig_t, allowArmingWithoutFix",
+      "feature_flags": [
+        "#ifdef USE_GPS",
+        "#ifdef USE_GPS_RESCUE"
+      ]
+    },
+    {
+      "name": "gps_rescue_alt_mode",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_GPS_RESCUE_ALT_MODE",
+      "pgn": "PG_GPS_RESCUE",
+      "offset": "gpsRescueConfig_t, altitudeMode",
+      "feature_flags": [
+        "#ifdef USE_GPS",
+        "#ifdef USE_GPS_RESCUE"
+      ]
+    },
+    {
+      "name": "gps_rescue_use_mag",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_GPS_RESCUE",
+      "offset": "gpsRescueConfig_t, useMag",
+      "feature_flags": [
+        "#ifdef USE_GPS",
+        "#ifdef USE_GPS_RESCUE",
+        "#ifdef USE_MAG"
+      ]
+    },
+    {
+      "name": "rc_center",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "1200, 1700",
+      "pgn": "PG_RC_CONTROLS_CONFIG",
+      "offset": "rcControlsConfig_t, rc_center",
+      "feature_flags": []
+    },
+    {
+      "name": "rc_deflection",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "250, 750",
+      "pgn": "PG_RC_CONTROLS_CONFIG",
+      "offset": "rcControlsConfig_t, rc_deflection",
+      "feature_flags": []
+    },
+    {
+      "name": "rc_min_throttle",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, PWM_PULSE_MAX",
+      "pgn": "PG_RC_CONTROLS_CONFIG",
+      "offset": "rcControlsConfig_t, rc_min_throttle",
+      "feature_flags": []
+    },
+    {
+      "name": "rc_max_throttle",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, PWM_PULSE_MAX",
+      "pgn": "PG_RC_CONTROLS_CONFIG",
+      "offset": "rcControlsConfig_t, rc_max_throttle",
+      "feature_flags": []
+    },
+    {
+      "name": "rc_smoothness",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_RC_CONTROLS_CONFIG",
+      "offset": "rcControlsConfig_t, rc_smoothness",
+      "feature_flags": []
+    },
+    {
+      "name": "deadband",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 100",
+      "pgn": "PG_RC_CONTROLS_CONFIG",
+      "offset": "rcControlsConfig_t, rc_deadband",
+      "feature_flags": []
+    },
+    {
+      "name": "yaw_deadband",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 100",
+      "pgn": "PG_RC_CONTROLS_CONFIG",
+      "offset": "rcControlsConfig_t, rc_yaw_deadband",
+      "feature_flags": []
+    },
+    {
+      "name": "profile_name",
+      "type_expr": "VAR_UINT8  | PROFILE_VALUE | MODE_STRING",
+      "config_kind": "string",
+      "config_expr": "1, MAX_PROFILE_NAME_LENGTH, STRING_FLAGS_NONE",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, profileName",
+      "feature_flags": [
+        "#ifdef USE_PROFILE_NAMES"
+      ]
+    },
+    {
+      "name": "pid_mode",
+      "type_expr": "VAR_UINT8  | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 9",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, pid_mode",
+      "feature_flags": []
+    },
+    {
+      "name": "pitch_p_gain",
+      "type_expr": "VAR_UINT16 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, PID_GAIN_MAX",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, pid[PID_PITCH].P",
+      "feature_flags": []
+    },
+    {
+      "name": "pitch_i_gain",
+      "type_expr": "VAR_UINT16 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, PID_GAIN_MAX",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, pid[PID_PITCH].I",
+      "feature_flags": []
+    },
+    {
+      "name": "pitch_d_gain",
+      "type_expr": "VAR_UINT16 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, PID_GAIN_MAX",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, pid[PID_PITCH].D",
+      "feature_flags": []
+    },
+    {
+      "name": "pitch_f_gain",
+      "type_expr": "VAR_UINT16 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, PID_GAIN_MAX",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, pid[PID_PITCH].F",
+      "feature_flags": []
+    },
+    {
+      "name": "pitch_b_gain",
+      "type_expr": "VAR_UINT16 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, PID_GAIN_MAX",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, pid[PID_PITCH].B",
+      "feature_flags": []
+    },
+    {
+      "name": "pitch_o_gain",
+      "type_expr": "VAR_UINT16 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, PID_GAIN_MAX",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, pid[PID_PITCH].O",
+      "feature_flags": []
+    },
+    {
+      "name": "roll_p_gain",
+      "type_expr": "VAR_UINT16 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, PID_GAIN_MAX",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, pid[PID_ROLL].P",
+      "feature_flags": []
+    },
+    {
+      "name": "roll_i_gain",
+      "type_expr": "VAR_UINT16 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, PID_GAIN_MAX",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, pid[PID_ROLL].I",
+      "feature_flags": []
+    },
+    {
+      "name": "roll_d_gain",
+      "type_expr": "VAR_UINT16 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, PID_GAIN_MAX",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, pid[PID_ROLL].D",
+      "feature_flags": []
+    },
+    {
+      "name": "roll_f_gain",
+      "type_expr": "VAR_UINT16 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, PID_GAIN_MAX",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, pid[PID_ROLL].F",
+      "feature_flags": []
+    },
+    {
+      "name": "roll_b_gain",
+      "type_expr": "VAR_UINT16 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, PID_GAIN_MAX",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, pid[PID_ROLL].B",
+      "feature_flags": []
+    },
+    {
+      "name": "roll_o_gain",
+      "type_expr": "VAR_UINT16 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, PID_GAIN_MAX",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, pid[PID_ROLL].O",
+      "feature_flags": []
+    },
+    {
+      "name": "yaw_p_gain",
+      "type_expr": "VAR_UINT16 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, PID_GAIN_MAX",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, pid[PID_YAW].P",
+      "feature_flags": []
+    },
+    {
+      "name": "yaw_i_gain",
+      "type_expr": "VAR_UINT16 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, PID_GAIN_MAX",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, pid[PID_YAW].I",
+      "feature_flags": []
+    },
+    {
+      "name": "yaw_d_gain",
+      "type_expr": "VAR_UINT16 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, PID_GAIN_MAX",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, pid[PID_YAW].D",
+      "feature_flags": []
+    },
+    {
+      "name": "yaw_b_gain",
+      "type_expr": "VAR_UINT16 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, PID_GAIN_MAX",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, pid[PID_YAW].B",
+      "feature_flags": []
+    },
+    {
+      "name": "yaw_f_gain",
+      "type_expr": "VAR_UINT16 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, PID_GAIN_MAX",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, pid[PID_YAW].F",
+      "feature_flags": []
+    },
+    {
+      "name": "pitch_d_cutoff",
+      "type_expr": "VAR_UINT8  | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, dterm_cutoff[PID_PITCH]",
+      "feature_flags": []
+    },
+    {
+      "name": "pitch_b_cutoff",
+      "type_expr": "VAR_UINT8  | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, bterm_cutoff[PID_PITCH]",
+      "feature_flags": []
+    },
+    {
+      "name": "pitch_gyro_cutoff",
+      "type_expr": "VAR_UINT8  | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, gyro_cutoff[PID_PITCH]",
+      "feature_flags": []
+    },
+    {
+      "name": "roll_d_cutoff",
+      "type_expr": "VAR_UINT8  | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, dterm_cutoff[PID_ROLL]",
+      "feature_flags": []
+    },
+    {
+      "name": "roll_b_cutoff",
+      "type_expr": "VAR_UINT8  | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, bterm_cutoff[PID_ROLL]",
+      "feature_flags": []
+    },
+    {
+      "name": "roll_gyro_cutoff",
+      "type_expr": "VAR_UINT8  | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, gyro_cutoff[PID_ROLL]",
+      "feature_flags": []
+    },
+    {
+      "name": "yaw_d_cutoff",
+      "type_expr": "VAR_UINT8  | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, dterm_cutoff[PID_YAW]",
+      "feature_flags": []
+    },
+    {
+      "name": "yaw_b_cutoff",
+      "type_expr": "VAR_UINT8  | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, bterm_cutoff[PID_YAW]",
+      "feature_flags": []
+    },
+    {
+      "name": "yaw_gyro_cutoff",
+      "type_expr": "VAR_UINT8  | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, gyro_cutoff[PID_YAW]",
+      "feature_flags": []
+    },
+    {
+      "name": "yaw_cw_stop_gain",
+      "type_expr": "VAR_UINT8 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "25, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, yaw_cw_stop_gain",
+      "feature_flags": []
+    },
+    {
+      "name": "yaw_ccw_stop_gain",
+      "type_expr": "VAR_UINT8 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "25, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, yaw_ccw_stop_gain",
+      "feature_flags": []
+    },
+    {
+      "name": "yaw_precomp_cutoff",
+      "type_expr": "VAR_UINT8 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, yaw_precomp_cutoff",
+      "feature_flags": []
+    },
+    {
+      "name": "yaw_cyclic_ff_gain",
+      "type_expr": "VAR_UINT8 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, yaw_cyclic_ff_gain",
+      "feature_flags": []
+    },
+    {
+      "name": "yaw_collective_ff_gain",
+      "type_expr": "VAR_UINT8 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, yaw_collective_ff_gain",
+      "feature_flags": []
+    },
+    {
+      "name": "yaw_inertia_precomp_gain",
+      "type_expr": "VAR_UINT8 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, yaw_inertia_precomp_gain",
+      "feature_flags": []
+    },
+    {
+      "name": "yaw_inertia_precomp_cutoff",
+      "type_expr": "VAR_UINT8 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, yaw_inertia_precomp_cutoff",
+      "feature_flags": []
+    },
+    {
+      "name": "pitch_collective_ff_gain",
+      "type_expr": "VAR_UINT8 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, pitch_collective_ff_gain",
+      "feature_flags": []
+    },
+    {
+      "name": "cyclic_cross_coupling_gain",
+      "type_expr": "VAR_UINT8 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, cyclic_cross_coupling_gain",
+      "feature_flags": []
+    },
+    {
+      "name": "cyclic_cross_coupling_ratio",
+      "type_expr": "VAR_UINT8 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 200",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, cyclic_cross_coupling_ratio",
+      "feature_flags": []
+    },
+    {
+      "name": "cyclic_cross_coupling_cutoff",
+      "type_expr": "VAR_UINT8 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "1, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, cyclic_cross_coupling_cutoff",
+      "feature_flags": []
+    },
+    {
+      "name": "error_decay_time_ground",
+      "type_expr": "VAR_UINT8  | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, error_decay_time_ground",
+      "feature_flags": []
+    },
+    {
+      "name": "error_decay_time_cyclic",
+      "type_expr": "VAR_UINT8  | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, error_decay_time_cyclic",
+      "feature_flags": []
+    },
+    {
+      "name": "error_decay_time_yaw",
+      "type_expr": "VAR_UINT8  | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, error_decay_time_yaw",
+      "feature_flags": []
+    },
+    {
+      "name": "error_decay_limit_cyclic",
+      "type_expr": "VAR_UINT8  | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, error_decay_limit_cyclic",
+      "feature_flags": []
+    },
+    {
+      "name": "error_decay_limit_yaw",
+      "type_expr": "VAR_UINT8  | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, error_decay_limit_yaw",
+      "feature_flags": []
+    },
+    {
+      "name": "offset_flood_relax_level",
+      "type_expr": "VAR_UINT8 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "10, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, offset_flood_relax_level",
+      "feature_flags": []
+    },
+    {
+      "name": "offset_flood_relax_cutoff",
+      "type_expr": "VAR_UINT8 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "1, 100",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, offset_flood_relax_cutoff",
+      "feature_flags": []
+    },
+    {
+      "name": "iterm_relax_type",
+      "type_expr": "VAR_UINT8  | PROFILE_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_ITERM_RELAX_TYPE",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, iterm_relax_type",
+      "feature_flags": []
+    },
+    {
+      "name": "angle_level_strength",
+      "type_expr": "VAR_UINT8  | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 200",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, angle.level_strength",
+      "feature_flags": []
+    },
+    {
+      "name": "angle_level_limit",
+      "type_expr": "VAR_UINT8  | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "10, 90",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, angle.level_limit",
+      "feature_flags": []
+    },
+    {
+      "name": "horizon_level_strength",
+      "type_expr": "VAR_UINT8  | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 200",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, horizon.level_strength",
+      "feature_flags": []
+    },
+    {
+      "name": "horizon_transition",
+      "type_expr": "VAR_UINT8  | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 200",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, horizon.transition",
+      "feature_flags": []
+    },
+    {
+      "name": "horizon_tilt_effect",
+      "type_expr": "VAR_UINT8  | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0,  250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, horizon.tilt_effect",
+      "feature_flags": []
+    },
+    {
+      "name": "horizon_tilt_expert_mode",
+      "type_expr": "VAR_UINT8  | PROFILE_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, horizon.tilt_expert_mode",
+      "feature_flags": []
+    },
+    {
+      "name": "acro_trainer_angle_limit",
+      "type_expr": "VAR_UINT8  | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "10, 80",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, trainer.angle_limit",
+      "feature_flags": [
+        "#ifdef USE_ACRO_TRAINER"
+      ]
+    },
+    {
+      "name": "acro_trainer_lookahead_ms",
+      "type_expr": "VAR_UINT16 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "10, 200",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, trainer.lookahead_ms",
+      "feature_flags": [
+        "#ifdef USE_ACRO_TRAINER"
+      ]
+    },
+    {
+      "name": "acro_trainer_gain",
+      "type_expr": "VAR_UINT8  | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "25, 255",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, trainer.gain",
+      "feature_flags": [
+        "#ifdef USE_ACRO_TRAINER"
+      ]
+    },
+    {
+      "name": "rescue_mode",
+      "type_expr": "VAR_UINT8  | PROFILE_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_RESCUE_MODE",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, rescue.mode",
+      "feature_flags": []
+    },
+    {
+      "name": "rescue_flip",
+      "type_expr": "VAR_UINT8  | PROFILE_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, rescue.flip_mode",
+      "feature_flags": []
+    },
+    {
+      "name": "rescue_flip_gain",
+      "type_expr": "VAR_UINT8  | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "5, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, rescue.flip_gain",
+      "feature_flags": []
+    },
+    {
+      "name": "rescue_level_gain",
+      "type_expr": "VAR_UINT8  | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "5, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, rescue.level_gain",
+      "feature_flags": []
+    },
+    {
+      "name": "rescue_pull_up_time",
+      "type_expr": "VAR_UINT8  | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, rescue.pull_up_time",
+      "feature_flags": []
+    },
+    {
+      "name": "rescue_climb_time",
+      "type_expr": "VAR_UINT8  | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, rescue.climb_time",
+      "feature_flags": []
+    },
+    {
+      "name": "rescue_flip_time",
+      "type_expr": "VAR_UINT8  | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, rescue.flip_time",
+      "feature_flags": []
+    },
+    {
+      "name": "rescue_exit_time",
+      "type_expr": "VAR_UINT8  | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, rescue.exit_time",
+      "feature_flags": []
+    },
+    {
+      "name": "rescue_pull_up_collective",
+      "type_expr": "VAR_UINT16 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 1000",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, rescue.pull_up_collective",
+      "feature_flags": []
+    },
+    {
+      "name": "rescue_climb_collective",
+      "type_expr": "VAR_UINT16 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 1000",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, rescue.climb_collective",
+      "feature_flags": []
+    },
+    {
+      "name": "rescue_hover_collective",
+      "type_expr": "VAR_UINT16 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 1000",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, rescue.hover_collective",
+      "feature_flags": []
+    },
+    {
+      "name": "rescue_hover_altitude",
+      "type_expr": "VAR_UINT16 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 10000",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, rescue.hover_altitude",
+      "feature_flags": []
+    },
+    {
+      "name": "rescue_alt_p_gain",
+      "type_expr": "VAR_UINT16 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 10000",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, rescue.alt_p_gain",
+      "feature_flags": []
+    },
+    {
+      "name": "rescue_alt_i_gain",
+      "type_expr": "VAR_UINT16 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 10000",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, rescue.alt_i_gain",
+      "feature_flags": []
+    },
+    {
+      "name": "rescue_alt_d_gain",
+      "type_expr": "VAR_UINT16 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 10000",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, rescue.alt_d_gain",
+      "feature_flags": []
+    },
+    {
+      "name": "rescue_max_sp_rate",
+      "type_expr": "VAR_UINT16 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "1, 1000",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, rescue.max_setpoint_rate",
+      "feature_flags": []
+    },
+    {
+      "name": "rescue_max_sp_accel",
+      "type_expr": "VAR_UINT16 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "1, 10000",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, rescue.max_setpoint_accel",
+      "feature_flags": []
+    },
+    {
+      "name": "rescue_max_collective",
+      "type_expr": "VAR_UINT16 | PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "1, 1000",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, rescue.max_collective",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_headspeed",
+      "type_expr": "VAR_UINT16 |  PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 50000",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, governor.headspeed",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_gain",
+      "type_expr": "VAR_UINT8  |  PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, governor.gain",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_p_gain",
+      "type_expr": "VAR_UINT8  |  PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, governor.p_gain",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_i_gain",
+      "type_expr": "VAR_UINT8  |  PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, governor.i_gain",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_d_gain",
+      "type_expr": "VAR_UINT8  |  PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, governor.d_gain",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_f_gain",
+      "type_expr": "VAR_UINT8  |  PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, governor.f_gain",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_p_limit",
+      "type_expr": "VAR_UINT8  |  PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 100",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, governor.p_limit",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_i_limit",
+      "type_expr": "VAR_UINT8  |  PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 100",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, governor.i_limit",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_d_limit",
+      "type_expr": "VAR_UINT8  |  PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 100",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, governor.d_limit",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_f_limit",
+      "type_expr": "VAR_UINT8  |  PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 100",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, governor.f_limit",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_tta_gain",
+      "type_expr": "VAR_UINT8  |  PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, governor.tta_gain",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_tta_limit",
+      "type_expr": "VAR_UINT8  |  PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, governor.tta_limit",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_yaw_ff_weight",
+      "type_expr": "VAR_UINT8  |  PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, governor.yaw_weight",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_cyclic_ff_weight",
+      "type_expr": "VAR_UINT8  |  PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, governor.cyclic_weight",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_collective_ff_weight",
+      "type_expr": "VAR_UINT8  |  PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, governor.collective_weight",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_max_throttle",
+      "type_expr": "VAR_UINT8  |  PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "10, 100",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, governor.max_throttle",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_min_throttle",
+      "type_expr": "VAR_UINT8  |  PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "10, 100",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, governor.min_throttle",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_fallback_drop",
+      "type_expr": "VAR_UINT8  |  PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 50",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, governor.fallback_drop",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_collective_curve",
+      "type_expr": "VAR_UINT8  |  PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "5, 40",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, governor.collective_curve",
+      "feature_flags": []
+    },
+    {
+      "name": "gov_dyn_min_throttle",
+      "type_expr": "VAR_UINT8  |  PROFILE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 100",
+      "pgn": "PG_PID_PROFILE",
+      "offset": "pidProfile_t, governor.dyn_min_throttle",
+      "feature_flags": []
+    },
+    {
+      "name": "tlm_inverted",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_TELEMETRY_CONFIG",
+      "offset": "telemetryConfig_t, telemetry_inverted",
+      "feature_flags": [
+        "#ifdef USE_TELEMETRY"
+      ]
+    },
+    {
+      "name": "tlm_halfduplex",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_TELEMETRY_CONFIG",
+      "offset": "telemetryConfig_t, halfDuplex",
+      "feature_flags": [
+        "#ifdef USE_TELEMETRY"
+      ]
+    },
+    {
+      "name": "tlm_pinswap",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_TELEMETRY_CONFIG",
+      "offset": "telemetryConfig_t, pinSwap",
+      "feature_flags": [
+        "#ifdef USE_TELEMETRY",
+        "#ifdef USE_SERIAL_PINSWAP"
+      ]
+    },
+    {
+      "name": "frsky_default_lat",
+      "type_expr": "VAR_INT16  | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "-9000, 9000",
+      "pgn": "PG_TELEMETRY_CONFIG",
+      "offset": "telemetryConfig_t, gpsNoFixLatitude",
+      "feature_flags": [
+        "#ifdef USE_TELEMETRY",
+        "#if defined(USE_TELEMETRY_FRSKY_HUB)",
+        "#if defined(USE_GPS)"
+      ]
+    },
+    {
+      "name": "frsky_default_long",
+      "type_expr": "VAR_INT16  | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "-18000, 18000",
+      "pgn": "PG_TELEMETRY_CONFIG",
+      "offset": "telemetryConfig_t, gpsNoFixLongitude",
+      "feature_flags": [
+        "#ifdef USE_TELEMETRY",
+        "#if defined(USE_TELEMETRY_FRSKY_HUB)",
+        "#if defined(USE_GPS)"
+      ]
+    },
+    {
+      "name": "frsky_gps_format",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, FRSKY_FORMAT_NMEA",
+      "pgn": "PG_TELEMETRY_CONFIG",
+      "offset": "telemetryConfig_t, frsky_coordinate_format",
+      "feature_flags": [
+        "#ifdef USE_TELEMETRY",
+        "#if defined(USE_TELEMETRY_FRSKY_HUB)",
+        "#if defined(USE_GPS)"
+      ]
+    },
+    {
+      "name": "frsky_unit",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_UNIT",
+      "pgn": "PG_TELEMETRY_CONFIG",
+      "offset": "telemetryConfig_t, frsky_unit",
+      "feature_flags": [
+        "#ifdef USE_TELEMETRY",
+        "#if defined(USE_TELEMETRY_FRSKY_HUB)",
+        "#if defined(USE_GPS)"
+      ]
+    },
+    {
+      "name": "frsky_vfas_precision",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "FRSKY_VFAS_PRECISION_LOW,  FRSKY_VFAS_PRECISION_HIGH",
+      "pgn": "PG_TELEMETRY_CONFIG",
+      "offset": "telemetryConfig_t, frsky_vfas_precision",
+      "feature_flags": [
+        "#ifdef USE_TELEMETRY",
+        "#if defined(USE_TELEMETRY_FRSKY_HUB)"
+      ]
+    },
+    {
+      "name": "hott_alarm_int",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 120",
+      "pgn": "PG_TELEMETRY_CONFIG",
+      "offset": "telemetryConfig_t, hottAlarmSoundInterval",
+      "feature_flags": [
+        "#ifdef USE_TELEMETRY"
+      ]
+    },
+    {
+      "name": "report_cell_voltage",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_TELEMETRY_CONFIG",
+      "offset": "telemetryConfig_t, report_cell_voltage",
+      "feature_flags": [
+        "#ifdef USE_TELEMETRY"
+      ]
+    },
+    {
+      "name": "mavlink_mah_as_heading_divisor",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 30000",
+      "pgn": "PG_TELEMETRY_CONFIG",
+      "offset": "telemetryConfig_t, mavlink_mah_as_heading_divisor",
+      "feature_flags": [
+        "#ifdef USE_TELEMETRY",
+        "#ifdef USE_TELEMETRY_MAVLINK"
+      ]
+    },
+    {
+      "name": "crsf_telemetry_mode",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_TELEM_MODE",
+      "pgn": "PG_TELEMETRY_CONFIG",
+      "offset": "telemetryConfig_t, crsf_telemetry_mode",
+      "feature_flags": [
+        "#ifdef USE_TELEMETRY"
+      ]
+    },
+    {
+      "name": "crsf_telemetry_link_rate",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 50000",
+      "pgn": "PG_TELEMETRY_CONFIG",
+      "offset": "telemetryConfig_t, crsf_telemetry_link_rate",
+      "feature_flags": [
+        "#ifdef USE_TELEMETRY"
+      ]
+    },
+    {
+      "name": "crsf_telemetry_link_ratio",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 50000",
+      "pgn": "PG_TELEMETRY_CONFIG",
+      "offset": "telemetryConfig_t, crsf_telemetry_link_ratio",
+      "feature_flags": [
+        "#ifdef USE_TELEMETRY"
+      ]
+    },
+    {
+      "name": "ledstrip_visual_beeper",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_LED_STRIP_CONFIG",
+      "offset": "ledStripConfig_t, ledstrip_visual_beeper",
+      "feature_flags": [
+        "#ifdef USE_LED_STRIP"
+      ]
+    },
+    {
+      "name": "ledstrip_visual_beeper_color",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_LEDSTRIP_COLOR",
+      "pgn": "PG_LED_STRIP_CONFIG",
+      "offset": "ledStripConfig_t, ledstrip_visual_beeper_color",
+      "feature_flags": [
+        "#ifdef USE_LED_STRIP"
+      ]
+    },
+    {
+      "name": "ledstrip_grb_rgb",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_RGB_GRB",
+      "pgn": "PG_LED_STRIP_CONFIG",
+      "offset": "ledStripConfig_t, ledstrip_grb_rgb",
+      "feature_flags": [
+        "#ifdef USE_LED_STRIP"
+      ]
+    },
+    {
+      "name": "ledstrip_profile",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_LED_PROFILE",
+      "pgn": "PG_LED_STRIP_CONFIG",
+      "offset": "ledStripConfig_t, ledstrip_profile",
+      "feature_flags": [
+        "#ifdef USE_LED_STRIP"
+      ]
+    },
+    {
+      "name": "ledstrip_race_color",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_LEDSTRIP_COLOR",
+      "pgn": "PG_LED_STRIP_CONFIG",
+      "offset": "ledStripConfig_t, ledstrip_race_color",
+      "feature_flags": [
+        "#ifdef USE_LED_STRIP"
+      ]
+    },
+    {
+      "name": "ledstrip_beacon_color",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_LEDSTRIP_COLOR",
+      "pgn": "PG_LED_STRIP_CONFIG",
+      "offset": "ledStripConfig_t, ledstrip_beacon_color",
+      "feature_flags": [
+        "#ifdef USE_LED_STRIP"
+      ]
+    },
+    {
+      "name": "ledstrip_beacon_period_ms",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "50, 10000",
+      "pgn": "PG_LED_STRIP_CONFIG",
+      "offset": "ledStripConfig_t, ledstrip_beacon_period_ms",
+      "feature_flags": [
+        "#ifdef USE_LED_STRIP"
+      ]
+    },
+    {
+      "name": "ledstrip_beacon_percent",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 100",
+      "pgn": "PG_LED_STRIP_CONFIG",
+      "offset": "ledStripConfig_t, ledstrip_beacon_percent",
+      "feature_flags": [
+        "#ifdef USE_LED_STRIP"
+      ]
+    },
+    {
+      "name": "ledstrip_beacon_armed_only",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_LED_STRIP_CONFIG",
+      "offset": "ledStripConfig_t, ledstrip_beacon_armed_only",
+      "feature_flags": [
+        "#ifdef USE_LED_STRIP"
+      ]
+    },
+    {
+      "name": "ledstrip_brightness",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "5, 100",
+      "pgn": "PG_LED_STRIP_CONFIG",
+      "offset": "ledStripConfig_t, ledstrip_brightness",
+      "feature_flags": [
+        "#ifdef USE_LED_STRIP"
+      ]
+    },
+    {
+      "name": "ledstrip_blink_period_ms",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "10, 500",
+      "pgn": "PG_LED_STRIP_CONFIG",
+      "offset": "ledStripConfig_t, ledstrip_blink_period_ms",
+      "feature_flags": [
+        "#ifdef USE_LED_STRIP"
+      ]
+    },
+    {
+      "name": "ledstrip_flicker_rate",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 100",
+      "pgn": "PG_LED_STRIP_CONFIG",
+      "offset": "ledStripConfig_t, ledstrip_flicker_rate",
+      "feature_flags": [
+        "#ifdef USE_LED_STRIP"
+      ]
+    },
+    {
+      "name": "ledstrip_fade_rate",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 100",
+      "pgn": "PG_LED_STRIP_CONFIG",
+      "offset": "ledStripConfig_t, ledstrip_fade_rate",
+      "feature_flags": [
+        "#ifdef USE_LED_STRIP"
+      ]
+    },
+    {
+      "name": "sdcard_detect_inverted",
+      "type_expr": "VAR_UINT8  | HARDWARE_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_SDCARD_CONFIG",
+      "offset": "sdcardConfig_t, cardDetectInverted",
+      "feature_flags": [
+        "#ifdef USE_SDCARD"
+      ]
+    },
+    {
+      "name": "sdcard_mode",
+      "type_expr": "VAR_UINT8  | HARDWARE_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_SDCARD_MODE",
+      "pgn": "PG_SDCARD_CONFIG",
+      "offset": "sdcardConfig_t, mode",
+      "feature_flags": [
+        "#ifdef USE_SDCARD"
+      ]
+    },
+    {
+      "name": "sdcard_spi_bus",
+      "type_expr": "VAR_UINT8  | HARDWARE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, SPIDEV_COUNT",
+      "pgn": "PG_SDCARD_CONFIG",
+      "offset": "sdcardConfig_t, device",
+      "feature_flags": [
+        "#ifdef USE_SDCARD_SPI"
+      ]
+    },
+    {
+      "name": "sdio_clk_bypass",
+      "type_expr": "VAR_UINT8  | HARDWARE_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_SDIO_CONFIG",
+      "offset": "sdioConfig_t, clockBypass",
+      "feature_flags": [
+        "#ifdef USE_SDCARD_SDIO"
+      ]
+    },
+    {
+      "name": "sdio_use_cache",
+      "type_expr": "VAR_UINT8  | HARDWARE_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_SDIO_CONFIG",
+      "offset": "sdioConfig_t, useCache",
+      "feature_flags": [
+        "#ifdef USE_SDCARD_SDIO"
+      ]
+    },
+    {
+      "name": "sdio_use_4bit_width",
+      "type_expr": "VAR_UINT8  | HARDWARE_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_SDIO_CONFIG",
+      "offset": "sdioConfig_t, use4BitWidth",
+      "feature_flags": [
+        "#ifdef USE_SDCARD_SDIO"
+      ]
+    },
+    {
+      "name": "sdio_device",
+      "type_expr": "VAR_UINT8  | HARDWARE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, SDIODEV_COUNT",
+      "pgn": "PG_SDIO_CONFIG",
+      "offset": "sdioConfig_t, device",
+      "feature_flags": [
+        "#ifdef USE_SDCARD_SDIO",
+        "#ifdef STM32H7"
+      ]
+    },
+    {
+      "name": "osd_units",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_UNIT",
+      "pgn": "PG_OSD_CONFIG",
+      "offset": "osdConfig_t, units",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_rssi_alarm",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 100",
+      "pgn": "PG_OSD_CONFIG",
+      "offset": "osdConfig_t, rssi_alarm",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_link_quality_alarm",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 100",
+      "pgn": "PG_OSD_CONFIG",
+      "offset": "osdConfig_t, link_quality_alarm",
+      "feature_flags": [
+        "#ifdef USE_OSD",
+        "#ifdef USE_RX_LINK_QUALITY_INFO"
+      ]
+    },
+    {
+      "name": "osd_rssi_dbm_alarm",
+      "type_expr": "VAR_INT16   | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "CRSF_RSSI_MIN, CRSF_SNR_MAX",
+      "pgn": "PG_OSD_CONFIG",
+      "offset": "osdConfig_t, rssi_dbm_alarm",
+      "feature_flags": [
+        "#ifdef USE_OSD",
+        "#ifdef USE_RX_RSSI_DBM"
+      ]
+    },
+    {
+      "name": "osd_cap_alarm",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 20000",
+      "pgn": "PG_OSD_CONFIG",
+      "offset": "osdConfig_t, cap_alarm",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_alt_alarm",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 10000",
+      "pgn": "PG_OSD_CONFIG",
+      "offset": "osdConfig_t, alt_alarm",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_distance_alarm",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, UINT16_MAX",
+      "pgn": "PG_OSD_CONFIG",
+      "offset": "osdConfig_t, distance_alarm",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_esc_temp_alarm",
+      "type_expr": "VAR_INT8   | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "INT8_MIN, INT8_MAX",
+      "pgn": "PG_OSD_CONFIG",
+      "offset": "osdConfig_t, esc_temp_alarm",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_esc_rpm_alarm",
+      "type_expr": "VAR_INT16  | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "ESC_RPM_ALARM_OFF, INT16_MAX",
+      "pgn": "PG_OSD_CONFIG",
+      "offset": "osdConfig_t, esc_rpm_alarm",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_esc_current_alarm",
+      "type_expr": "VAR_INT16  | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "ESC_CURRENT_ALARM_OFF, INT16_MAX",
+      "pgn": "PG_OSD_CONFIG",
+      "offset": "osdConfig_t, esc_current_alarm",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_core_temp_alarm",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, UINT8_MAX",
+      "pgn": "PG_OSD_CONFIG",
+      "offset": "osdConfig_t, core_temp_alarm",
+      "feature_flags": [
+        "#ifdef USE_OSD",
+        "#ifdef USE_ADC_INTERNAL"
+      ]
+    },
+    {
+      "name": "osd_ah_max_pit",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 90",
+      "pgn": "PG_OSD_CONFIG",
+      "offset": "osdConfig_t, ahMaxPitch",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_ah_max_rol",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 90",
+      "pgn": "PG_OSD_CONFIG",
+      "offset": "osdConfig_t, ahMaxRoll",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_ah_invert",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_OSD_CONFIG",
+      "offset": "osdConfig_t, ahInvert",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_logo_on_arming",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OSD_LOGO_ON_ARMING",
+      "pgn": "PG_OSD_CONFIG",
+      "offset": "osdConfig_t, logo_on_arming",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_logo_on_arming_duration",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "5, 50",
+      "pgn": "PG_OSD_CONFIG",
+      "offset": "osdConfig_t, logo_on_arming_duration",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_tim1",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, INT16_MAX",
+      "pgn": "PG_OSD_CONFIG",
+      "offset": "osdConfig_t, timers[OSD_TIMER_1]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_tim2",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, INT16_MAX",
+      "pgn": "PG_OSD_CONFIG",
+      "offset": "osdConfig_t, timers[OSD_TIMER_2]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_vbat_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_MAIN_BATT_VOLTAGE]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_rssi_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_RSSI_VALUE]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_link_quality_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_LINK_QUALITY]",
+      "feature_flags": [
+        "#ifdef USE_OSD",
+        "#ifdef USE_RX_LINK_QUALITY_INFO"
+      ]
+    },
+    {
+      "name": "osd_link_tx_power_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_TX_UPLINK_POWER]",
+      "feature_flags": [
+        "#ifdef USE_OSD",
+        "#ifdef USE_RX_LINK_UPLINK_POWER"
+      ]
+    },
+    {
+      "name": "osd_rssi_dbm_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_RSSI_DBM_VALUE]",
+      "feature_flags": [
+        "#ifdef USE_OSD",
+        "#ifdef USE_RX_RSSI_DBM"
+      ]
+    },
+    {
+      "name": "osd_tim_1_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_ITEM_TIMER_1]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_tim_2_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_ITEM_TIMER_2]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_remaining_time_estimate_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_REMAINING_TIME_ESTIMATE]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_flymode_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_FLYMODE]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_g_force_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_G_FORCE]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_throttle_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_THROTTLE_POS]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_vtx_channel_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_VTX_CHANNEL]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_crosshairs_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_CROSSHAIRS]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_ah_sbar_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_HORIZON_SIDEBARS]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_ah_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_ARTIFICIAL_HORIZON]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_current_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_CURRENT_DRAW]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_mah_drawn_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_MAH_DRAWN]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_motor_diag_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_MOTOR_DIAG]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_craft_name_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_CRAFT_NAME]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_display_name_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_DISPLAY_NAME]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_gps_speed_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_GPS_SPEED]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_gps_lon_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_GPS_LON]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_gps_lat_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_GPS_LAT]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_gps_sats_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_GPS_SATS]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_home_dir_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_HOME_DIR]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_home_dist_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_HOME_DIST]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_flight_dist_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_FLIGHT_DIST]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_compass_bar_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_COMPASS_BAR]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_altitude_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_ALTITUDE]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_pid_roll_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_ROLL_PIDS]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_pid_pitch_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_PITCH_PIDS]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_pid_yaw_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_YAW_PIDS]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_debug_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_DEBUG]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_power_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_POWER]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_pidrate_profile_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_PIDRATE_PROFILE]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_warnings_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_WARNINGS]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_avg_cell_voltage_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_AVG_CELL_VOLTAGE]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_pit_ang_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_PITCH_ANGLE]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_rol_ang_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_ROLL_ANGLE]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_battery_usage_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_MAIN_BATT_USAGE]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_disarmed_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_DISARMED]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_nheading_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_NUMERICAL_HEADING]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_up_down_reference_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_UP_DOWN_REFERENCE]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_nvario_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_NUMERICAL_VARIO]",
+      "feature_flags": [
+        "#ifdef USE_OSD",
+        "#ifdef USE_VARIO"
+      ]
+    },
+    {
+      "name": "osd_esc_tmp_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_ESC_TMP]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_esc_rpm_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_ESC_RPM]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_esc_rpm_freq_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_ESC_RPM_FREQ]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_rtc_date_time_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_RTC_DATETIME]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_adjustment_range_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_ADJUSTMENT_RANGE]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_flip_arrow_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_FLIP_ARROW]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_core_temp_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_CORE_TEMPERATURE]",
+      "feature_flags": [
+        "#ifdef USE_OSD",
+        "#ifdef USE_ADC_INTERNAL"
+      ]
+    },
+    {
+      "name": "osd_log_status_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_LOG_STATUS]",
+      "feature_flags": [
+        "#ifdef USE_OSD",
+        "#ifdef USE_BLACKBOX"
+      ]
+    },
+    {
+      "name": "osd_stick_overlay_left_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_STICK_OVERLAY_LEFT]",
+      "feature_flags": [
+        "#ifdef USE_OSD",
+        "#ifdef USE_OSD_STICK_OVERLAY"
+      ]
+    },
+    {
+      "name": "osd_stick_overlay_right_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_STICK_OVERLAY_RIGHT]",
+      "feature_flags": [
+        "#ifdef USE_OSD",
+        "#ifdef USE_OSD_STICK_OVERLAY"
+      ]
+    },
+    {
+      "name": "osd_stick_overlay_radio_mode",
+      "type_expr": "VAR_UINT8   | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "1, 4",
+      "pgn": "PG_OSD_CONFIG",
+      "offset": "osdConfig_t, overlay_radio_mode",
+      "feature_flags": [
+        "#ifdef USE_OSD",
+        "#ifdef USE_OSD_STICK_OVERLAY"
+      ]
+    },
+    {
+      "name": "osd_rate_profile_name_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_RATE_PROFILE_NAME]",
+      "feature_flags": [
+        "#ifdef USE_OSD",
+        "#ifdef USE_PROFILE_NAMES"
+      ]
+    },
+    {
+      "name": "osd_pid_profile_name_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_PID_PROFILE_NAME]",
+      "feature_flags": [
+        "#ifdef USE_OSD",
+        "#ifdef USE_PROFILE_NAMES"
+      ]
+    },
+    {
+      "name": "osd_profile_name_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_PROFILE_NAME]",
+      "feature_flags": [
+        "#ifdef USE_OSD",
+        "#ifdef USE_OSD_PROFILES"
+      ]
+    },
+    {
+      "name": "osd_rcchannels_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_RC_CHANNELS]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_camera_frame_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_CAMERA_FRAME]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_efficiency_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_EFFICIENCY]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_total_flights_pos",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, OSD_POSCFG_MAX",
+      "pgn": "PG_OSD_ELEMENT_CONFIG",
+      "offset": "osdElementConfig_t, item_pos[OSD_TOTAL_FLIGHTS]",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_profile",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "1, OSD_PROFILE_COUNT",
+      "pgn": "PG_OSD_CONFIG",
+      "offset": "osdConfig_t, osdProfileIndex",
+      "feature_flags": [
+        "#ifdef USE_OSD",
+        "#ifdef USE_OSD_PROFILES"
+      ]
+    },
+    {
+      "name": "osd_profile_1_name",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_STRING",
+      "config_kind": "string",
+      "config_expr": "1, OSD_PROFILE_NAME_LENGTH, STRING_FLAGS_NONE",
+      "pgn": "PG_OSD_CONFIG",
+      "offset": "osdConfig_t, profile[0]",
+      "feature_flags": [
+        "#ifdef USE_OSD",
+        "#ifdef USE_OSD_PROFILES"
+      ]
+    },
+    {
+      "name": "osd_profile_2_name",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_STRING",
+      "config_kind": "string",
+      "config_expr": "1, OSD_PROFILE_NAME_LENGTH, STRING_FLAGS_NONE",
+      "pgn": "PG_OSD_CONFIG",
+      "offset": "osdConfig_t, profile[1]",
+      "feature_flags": [
+        "#ifdef USE_OSD",
+        "#ifdef USE_OSD_PROFILES"
+      ]
+    },
+    {
+      "name": "osd_profile_3_name",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_STRING",
+      "config_kind": "string",
+      "config_expr": "1, OSD_PROFILE_NAME_LENGTH, STRING_FLAGS_NONE",
+      "pgn": "PG_OSD_CONFIG",
+      "offset": "osdConfig_t, profile[2]",
+      "feature_flags": [
+        "#ifdef USE_OSD",
+        "#ifdef USE_OSD_PROFILES"
+      ]
+    },
+    {
+      "name": "osd_gps_sats_show_hdop",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_OSD_CONFIG",
+      "offset": "osdConfig_t, gps_sats_show_hdop",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_displayport_device",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OSD_DISPLAYPORT_DEVICE",
+      "pgn": "PG_OSD_CONFIG",
+      "offset": "osdConfig_t, displayPortDevice",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_camera_frame_width",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "OSD_CAMERA_FRAME_MIN_WIDTH, OSD_CAMERA_FRAME_MAX_WIDTH",
+      "pgn": "PG_OSD_CONFIG",
+      "offset": "osdConfig_t, camera_frame_width",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_camera_frame_height",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "OSD_CAMERA_FRAME_MIN_HEIGHT, OSD_CAMERA_FRAME_MAX_HEIGHT",
+      "pgn": "PG_OSD_CONFIG",
+      "offset": "osdConfig_t, camera_frame_height",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_stat_avg_cell_value",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_OSD_CONFIG",
+      "offset": "osdConfig_t, stat_show_cell_value",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_framerate_hz",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "OSD_FRAMERATE_MIN_HZ, OSD_FRAMERATE_MAX_HZ",
+      "pgn": "PG_OSD_CONFIG",
+      "offset": "osdConfig_t, framerate_hz",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "osd_menu_background",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_CMS_BACKGROUND",
+      "pgn": "PG_OSD_CONFIG",
+      "offset": "osdConfig_t, cms_background_type",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "system_hse_mhz",
+      "type_expr": "VAR_UINT8  | HARDWARE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 30",
+      "pgn": "PG_SYSTEM_CONFIG",
+      "offset": "systemConfig_t, hseMhz",
+      "feature_flags": [
+        "#if defined(STM32F4) || defined(STM32G4)"
+      ]
+    },
+    {
+      "name": "task_statistics",
+      "type_expr": "VAR_INT8   | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_SYSTEM_CONFIG",
+      "offset": "systemConfig_t, task_statistics",
+      "feature_flags": []
+    },
+    {
+      "name": "cpu_overclock",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OVERCLOCK",
+      "pgn": "PG_SYSTEM_CONFIG",
+      "offset": "systemConfig_t, cpu_overclock",
+      "feature_flags": [
+        "#ifdef USE_OVERCLOCK"
+      ]
+    },
+    {
+      "name": "vtx_band",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, VTX_TABLE_MAX_BANDS",
+      "pgn": "PG_VTX_SETTINGS_CONFIG",
+      "offset": "vtxSettingsConfig_t, band",
+      "feature_flags": [
+        "#ifdef USE_VTX_COMMON"
+      ]
+    },
+    {
+      "name": "vtx_channel",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, VTX_TABLE_MAX_CHANNELS",
+      "pgn": "PG_VTX_SETTINGS_CONFIG",
+      "offset": "vtxSettingsConfig_t, channel",
+      "feature_flags": [
+        "#ifdef USE_VTX_COMMON"
+      ]
+    },
+    {
+      "name": "vtx_power",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, VTX_TABLE_MAX_POWER_LEVELS - 1",
+      "pgn": "PG_VTX_SETTINGS_CONFIG",
+      "offset": "vtxSettingsConfig_t, power",
+      "feature_flags": [
+        "#ifdef USE_VTX_COMMON"
+      ]
+    },
+    {
+      "name": "vtx_low_power_disarm",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_VTX_LOW_POWER_DISARM",
+      "pgn": "PG_VTX_SETTINGS_CONFIG",
+      "offset": "vtxSettingsConfig_t, lowPowerDisarm",
+      "feature_flags": [
+        "#ifdef USE_VTX_COMMON"
+      ]
+    },
+    {
+      "name": "vtx_softserial_alt",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_VTX_SETTINGS_CONFIG",
+      "offset": "vtxSettingsConfig_t, softserialAlt",
+      "feature_flags": [
+        "#ifdef USE_VTX_COMMON"
+      ]
+    },
+    {
+      "name": "vtx_freq",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, VTX_SETTINGS_MAX_FREQUENCY_MHZ",
+      "pgn": "PG_VTX_SETTINGS_CONFIG",
+      "offset": "vtxSettingsConfig_t, freq",
+      "feature_flags": [
+        "#ifdef USE_VTX_COMMON",
+        "#ifdef VTX_SETTINGS_FREQCMD"
+      ]
+    },
+    {
+      "name": "vtx_pit_mode_freq",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, VTX_SETTINGS_MAX_FREQUENCY_MHZ",
+      "pgn": "PG_VTX_SETTINGS_CONFIG",
+      "offset": "vtxSettingsConfig_t, pitModeFreq",
+      "feature_flags": [
+        "#ifdef USE_VTX_COMMON",
+        "#ifdef VTX_SETTINGS_FREQCMD"
+      ]
+    },
+    {
+      "name": "vtx_halfduplex",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_VTX_CONFIG",
+      "offset": "vtxConfig_t, halfDuplex",
+      "feature_flags": [
+        "#if defined(USE_VTX_CONTROL) && defined(USE_VTX_COMMON)"
+      ]
+    },
+    {
+      "name": "vtx_pinswap",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_VTX_CONFIG",
+      "offset": "vtxConfig_t, pinSwap",
+      "feature_flags": [
+        "#if defined(USE_VTX_CONTROL) && defined(USE_VTX_COMMON)",
+        "#ifdef USE_SERIAL_PINSWAP"
+      ]
+    },
+    {
+      "name": "vtx_spi_bus",
+      "type_expr": "VAR_UINT8  | HARDWARE_VALUE | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, SPIDEV_COUNT",
+      "pgn": "PG_VTX_IO_CONFIG",
+      "offset": "vtxIOConfig_t, spiDevice",
+      "feature_flags": [
+        "#ifdef USE_VTX_RTC6705"
+      ]
+    },
+    {
+      "name": "vcd_video_system",
+      "type_expr": "VAR_UINT8   | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_VIDEO_SYSTEM",
+      "pgn": "PG_VCD_CONFIG",
+      "offset": "vcdProfile_t, video_system",
+      "feature_flags": [
+        "#if defined(USE_MAX7456) || defined(USE_FRSKYOSD) || defined(USE_MSP_DISPLAYPORT)"
+      ]
+    },
+    {
+      "name": "vcd_h_offset",
+      "type_expr": "VAR_INT8    | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "-32, 31",
+      "pgn": "PG_VCD_CONFIG",
+      "offset": "vcdProfile_t, h_offset",
+      "feature_flags": [
+        "#if defined(USE_MAX7456)"
+      ]
+    },
+    {
+      "name": "vcd_v_offset",
+      "type_expr": "VAR_INT8    | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "-15, 16",
+      "pgn": "PG_VCD_CONFIG",
+      "offset": "vcdProfile_t, v_offset",
+      "feature_flags": [
+        "#if defined(USE_MAX7456)"
+      ]
+    },
+    {
+      "name": "max7456_clock",
+      "type_expr": "VAR_UINT8   | HARDWARE_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_MAX7456_CLOCK",
+      "pgn": "PG_MAX7456_CONFIG",
+      "offset": "max7456Config_t, clockConfig",
+      "feature_flags": [
+        "#ifdef USE_MAX7456"
+      ]
+    },
+    {
+      "name": "max7456_spi_bus",
+      "type_expr": "VAR_UINT8   | HARDWARE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, SPIDEV_COUNT",
+      "pgn": "PG_MAX7456_CONFIG",
+      "offset": "max7456Config_t, spiDevice",
+      "feature_flags": [
+        "#ifdef USE_MAX7456"
+      ]
+    },
+    {
+      "name": "max7456_preinit_opu",
+      "type_expr": "VAR_UINT8   | HARDWARE_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_MAX7456_CONFIG",
+      "offset": "max7456Config_t, preInitOPU",
+      "feature_flags": [
+        "#ifdef USE_MAX7456"
+      ]
+    },
+    {
+      "name": "displayport_msp_col_adjust",
+      "type_expr": "VAR_INT8    | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "-6, 0",
+      "pgn": "PG_DISPLAY_PORT_MSP_CONFIG",
+      "offset": "displayPortProfile_t, colAdjust",
+      "feature_flags": [
+        "#ifdef USE_MSP_DISPLAYPORT"
+      ]
+    },
+    {
+      "name": "displayport_msp_row_adjust",
+      "type_expr": "VAR_INT8    | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "-3, 0",
+      "pgn": "PG_DISPLAY_PORT_MSP_CONFIG",
+      "offset": "displayPortProfile_t, rowAdjust",
+      "feature_flags": [
+        "#ifdef USE_MSP_DISPLAYPORT"
+      ]
+    },
+    {
+      "name": "displayport_msp_serial",
+      "type_expr": "VAR_INT8    | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "SERIAL_PORT_NONE, SERIAL_PORT_IDENTIFIER_MAX",
+      "pgn": "PG_DISPLAY_PORT_MSP_CONFIG",
+      "offset": "displayPortProfile_t, displayPortSerial",
+      "feature_flags": [
+        "#ifdef USE_MSP_DISPLAYPORT"
+      ]
+    },
+    {
+      "name": "displayport_msp_use_device_blink",
+      "type_expr": "VAR_UINT8   | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_DISPLAY_PORT_MSP_CONFIG",
+      "offset": "displayPortProfile_t, useDeviceBlink",
+      "feature_flags": [
+        "#ifdef USE_MSP_DISPLAYPORT"
+      ]
+    },
+    {
+      "name": "displayport_max7456_col_adjust",
+      "type_expr": "VAR_INT8| MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "-6, 0",
+      "pgn": "PG_DISPLAY_PORT_MAX7456_CONFIG",
+      "offset": "displayPortProfile_t, colAdjust",
+      "feature_flags": [
+        "#ifdef USE_MAX7456"
+      ]
+    },
+    {
+      "name": "displayport_max7456_row_adjust",
+      "type_expr": "VAR_INT8| MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "-3, 0",
+      "pgn": "PG_DISPLAY_PORT_MAX7456_CONFIG",
+      "offset": "displayPortProfile_t, rowAdjust",
+      "feature_flags": [
+        "#ifdef USE_MAX7456"
+      ]
+    },
+    {
+      "name": "displayport_max7456_inv",
+      "type_expr": "VAR_UINT8| MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_DISPLAY_PORT_MAX7456_CONFIG",
+      "offset": "displayPortProfile_t, invert",
+      "feature_flags": [
+        "#ifdef USE_MAX7456"
+      ]
+    },
+    {
+      "name": "displayport_max7456_blk",
+      "type_expr": "VAR_UINT8| MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 3",
+      "pgn": "PG_DISPLAY_PORT_MAX7456_CONFIG",
+      "offset": "displayPortProfile_t, blackBrightness",
+      "feature_flags": [
+        "#ifdef USE_MAX7456"
+      ]
+    },
+    {
+      "name": "displayport_max7456_wht",
+      "type_expr": "VAR_UINT8| MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 3",
+      "pgn": "PG_DISPLAY_PORT_MAX7456_CONFIG",
+      "offset": "displayPortProfile_t, whiteBrightness",
+      "feature_flags": [
+        "#ifdef USE_MAX7456"
+      ]
+    },
+    {
+      "name": "esc_sensor_protocol",
+      "type_expr": "VAR_UINT8   | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_ESC_SENSOR_PROTO",
+      "pgn": "PG_ESC_SENSOR_CONFIG",
+      "offset": "escSensorConfig_t, protocol",
+      "feature_flags": [
+        "#ifdef USE_ESC_SENSOR"
+      ]
+    },
+    {
+      "name": "esc_sensor_halfduplex",
+      "type_expr": "VAR_UINT8   | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_ESC_SENSOR_CONFIG",
+      "offset": "escSensorConfig_t, halfDuplex",
+      "feature_flags": [
+        "#ifdef USE_ESC_SENSOR"
+      ]
+    },
+    {
+      "name": "esc_sensor_pinswap",
+      "type_expr": "VAR_UINT8   | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_ESC_SENSOR_CONFIG",
+      "offset": "escSensorConfig_t, pinSwap",
+      "feature_flags": [
+        "#ifdef USE_ESC_SENSOR",
+        "#ifdef USE_SERIAL_PINSWAP"
+      ]
+    },
+    {
+      "name": "esc_sensor_update_hz",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "4, 500",
+      "pgn": "PG_ESC_SENSOR_CONFIG",
+      "offset": "escSensorConfig_t, update_hz",
+      "feature_flags": [
+        "#ifdef USE_ESC_SENSOR"
+      ]
+    },
+    {
+      "name": "esc_sensor_current_offset",
+      "type_expr": "VAR_UINT16  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 16000",
+      "pgn": "PG_ESC_SENSOR_CONFIG",
+      "offset": "escSensorConfig_t, current_offset",
+      "feature_flags": [
+        "#ifdef USE_ESC_SENSOR"
+      ]
+    },
+    {
+      "name": "esc_sensor_filter_cutoff",
+      "type_expr": "VAR_UINT8   | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 250",
+      "pgn": "PG_ESC_SENSOR_CONFIG",
+      "offset": "escSensorConfig_t, filter_cutoff",
+      "feature_flags": [
+        "#ifdef USE_ESC_SENSOR"
+      ]
+    },
+    {
+      "name": "esc_sensor_voltage_correction",
+      "type_expr": "VAR_INT8    | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "-100, 125",
+      "pgn": "PG_ESC_SENSOR_CONFIG",
+      "offset": "escSensorConfig_t, voltage_correction",
+      "feature_flags": [
+        "#ifdef USE_ESC_SENSOR"
+      ]
+    },
+    {
+      "name": "esc_sensor_current_correction",
+      "type_expr": "VAR_INT8    | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "-100, 125",
+      "pgn": "PG_ESC_SENSOR_CONFIG",
+      "offset": "escSensorConfig_t, current_correction",
+      "feature_flags": [
+        "#ifdef USE_ESC_SENSOR"
+      ]
+    },
+    {
+      "name": "esc_sensor_consumption_correction",
+      "type_expr": "VAR_INT8    | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "-100, 125",
+      "pgn": "PG_ESC_SENSOR_CONFIG",
+      "offset": "escSensorConfig_t, consumption_correction",
+      "feature_flags": [
+        "#ifdef USE_ESC_SENSOR"
+      ]
+    },
+    {
+      "name": "frsky_spi_autobind",
+      "type_expr": "VAR_UINT8   | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_RX_CC2500_SPI_CONFIG",
+      "offset": "rxCc2500SpiConfig_t, autoBind",
+      "feature_flags": [
+        "#ifdef USE_RX_FRSKY_SPI"
+      ]
+    },
+    {
+      "name": "frsky_spi_offset",
+      "type_expr": "VAR_INT8    | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "-127, 127",
+      "pgn": "PG_RX_CC2500_SPI_CONFIG",
+      "offset": "rxCc2500SpiConfig_t, bindOffset",
+      "feature_flags": [
+        "#ifdef USE_RX_FRSKY_SPI"
+      ]
+    },
+    {
+      "name": "frsky_x_rx_num",
+      "type_expr": "VAR_UINT8   | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, UINT8_MAX",
+      "pgn": "PG_RX_CC2500_SPI_CONFIG",
+      "offset": "rxCc2500SpiConfig_t, rxNum",
+      "feature_flags": [
+        "#ifdef USE_RX_FRSKY_SPI"
+      ]
+    },
+    {
+      "name": "frsky_spi_a1_source",
+      "type_expr": "VAR_UINT8   | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_RX_FRSKY_SPI_A1_SOURCE",
+      "pgn": "PG_RX_CC2500_SPI_CONFIG",
+      "offset": "rxCc2500SpiConfig_t, a1Source",
+      "feature_flags": [
+        "#ifdef USE_RX_FRSKY_SPI"
+      ]
+    },
+    {
+      "name": "cc2500_spi_chip_detect",
+      "type_expr": "VAR_UINT8   | HARDWARE_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_RX_CC2500_SPI_CONFIG",
+      "offset": "rxCc2500SpiConfig_t, chipDetectEnabled",
+      "feature_flags": [
+        "#ifdef USE_RX_FRSKY_SPI"
+      ]
+    },
+    {
+      "name": "led_inversion",
+      "type_expr": "VAR_UINT8  | HARDWARE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, ((1 << STATUS_LED_NUMBER) - 1)",
+      "pgn": "PG_STATUS_LED_CONFIG",
+      "offset": "statusLedConfig_t, inversion",
+      "feature_flags": []
+    },
+    {
+      "name": "dashboard_i2c_bus",
+      "type_expr": "VAR_UINT8  | HARDWARE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, I2CDEV_COUNT",
+      "pgn": "PG_DASHBOARD_CONFIG",
+      "offset": "dashboardConfig_t, device",
+      "feature_flags": [
+        "#ifdef USE_DASHBOARD"
+      ]
+    },
+    {
+      "name": "dashboard_i2c_addr",
+      "type_expr": "VAR_UINT8  | HARDWARE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "I2C_ADDR7_MIN, I2C_ADDR7_MAX",
+      "pgn": "PG_DASHBOARD_CONFIG",
+      "offset": "dashboardConfig_t, address",
+      "feature_flags": [
+        "#ifdef USE_DASHBOARD"
+      ]
+    },
+    {
+      "name": "camera_control_mode",
+      "type_expr": "VAR_UINT8 | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_CAMERA_CONTROL_MODE",
+      "pgn": "PG_CAMERA_CONTROL_CONFIG",
+      "offset": "cameraControlConfig_t, mode",
+      "feature_flags": [
+        "#ifdef USE_CAMERA_CONTROL"
+      ]
+    },
+    {
+      "name": "camera_control_ref_voltage",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "200, 400",
+      "pgn": "PG_CAMERA_CONTROL_CONFIG",
+      "offset": "cameraControlConfig_t, refVoltage",
+      "feature_flags": [
+        "#ifdef USE_CAMERA_CONTROL"
+      ]
+    },
+    {
+      "name": "camera_control_key_delay",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "100, 500",
+      "pgn": "PG_CAMERA_CONTROL_CONFIG",
+      "offset": "cameraControlConfig_t, keyDelayMs",
+      "feature_flags": [
+        "#ifdef USE_CAMERA_CONTROL"
+      ]
+    },
+    {
+      "name": "camera_control_internal_resistance",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "10, 1000",
+      "pgn": "PG_CAMERA_CONTROL_CONFIG",
+      "offset": "cameraControlConfig_t, internalResistance",
+      "feature_flags": [
+        "#ifdef USE_CAMERA_CONTROL"
+      ]
+    },
+    {
+      "name": "camera_control_inverted",
+      "type_expr": "VAR_UINT8 | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_CAMERA_CONTROL_CONFIG",
+      "offset": "cameraControlConfig_t, inverted",
+      "feature_flags": [
+        "#ifdef USE_CAMERA_CONTROL"
+      ]
+    },
+    {
+      "name": "rangefinder_hardware",
+      "type_expr": "VAR_UINT8 | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_RANGEFINDER_HARDWARE",
+      "pgn": "PG_RANGEFINDER_CONFIG",
+      "offset": "rangefinderConfig_t, rangefinder_hardware",
+      "feature_flags": [
+        "#ifdef USE_RANGEFINDER"
+      ]
+    },
+    {
+      "name": "usb_hid_cdc",
+      "type_expr": "VAR_UINT8 | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_USB_CONFIG",
+      "offset": "usbDev_t, type",
+      "feature_flags": [
+        "#ifdef USE_USB_CDC_HID"
+      ]
+    },
+    {
+      "name": "usb_msc_pin_pullup",
+      "type_expr": "VAR_UINT8 | HARDWARE_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_USB_CONFIG",
+      "offset": "usbDev_t, mscButtonUsePullup",
+      "feature_flags": [
+        "#ifdef USE_USB_MSC"
+      ]
+    },
+    {
+      "name": "flash_spi_bus",
+      "type_expr": "VAR_UINT8 | HARDWARE_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, SPIDEV_COUNT",
+      "pgn": "PG_FLASH_CONFIG",
+      "offset": "flashConfig_t, spiDevice",
+      "feature_flags": [
+        "#ifdef USE_FLASH_CHIP"
+      ]
+    },
+    {
+      "name": "rcdevice_init_dev_attempts",
+      "type_expr": "VAR_UINT8 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 10",
+      "pgn": "PG_RCDEVICE_CONFIG",
+      "offset": "rcdeviceConfig_t, initDeviceAttempts",
+      "feature_flags": [
+        "#ifdef USE_RCDEVICE"
+      ]
+    },
+    {
+      "name": "rcdevice_protocol_version",
+      "type_expr": "VAR_UINT8 | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "0, 1",
+      "pgn": "PG_RCDEVICE_CONFIG",
+      "offset": "rcdeviceConfig_t, protocolVersion",
+      "feature_flags": [
+        "#ifdef USE_RCDEVICE"
+      ]
+    },
+    {
+      "name": "rcdevice_feature",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 65535",
+      "pgn": "PG_RCDEVICE_CONFIG",
+      "offset": "rcdeviceConfig_t, feature",
+      "feature_flags": [
+        "#ifdef USE_RCDEVICE"
+      ]
+    },
+    {
+      "name": "spektrum_spi_protocol",
+      "type_expr": "VAR_UINT8 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, UINT8_MAX",
+      "pgn": "PG_RX_SPEKTRUM_SPI_CONFIG",
+      "offset": "spektrumConfig_t, protocol",
+      "feature_flags": [
+        "#ifdef USE_RX_SPEKTRUM"
+      ]
+    },
+    {
+      "name": "spektrum_spi_num_channels",
+      "type_expr": "VAR_UINT8 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, DSM_MAX_CHANNEL_COUNT",
+      "pgn": "PG_RX_SPEKTRUM_SPI_CONFIG",
+      "offset": "spektrumConfig_t, numChannels",
+      "feature_flags": [
+        "#ifdef USE_RX_SPEKTRUM"
+      ]
+    },
+    {
+      "name": "expresslrs_domain",
+      "type_expr": "VAR_UINT8 | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_FREQ_DOMAIN",
+      "pgn": "PG_RX_EXPRESSLRS_SPI_CONFIG",
+      "offset": "rxExpressLrsSpiConfig_t, domain",
+      "feature_flags": [
+        "#ifdef USE_RX_EXPRESSLRS"
+      ]
+    },
+    {
+      "name": "expresslrs_rate_index",
+      "type_expr": "VAR_UINT8 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 3",
+      "pgn": "PG_RX_EXPRESSLRS_SPI_CONFIG",
+      "offset": "rxExpressLrsSpiConfig_t, rateIndex",
+      "feature_flags": [
+        "#ifdef USE_RX_EXPRESSLRS"
+      ]
+    },
+    {
+      "name": "expresslrs_switch_mode",
+      "type_expr": "VAR_UINT8 | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_SWITCH_MODE",
+      "pgn": "PG_RX_EXPRESSLRS_SPI_CONFIG",
+      "offset": "rxExpressLrsSpiConfig_t, switchMode",
+      "feature_flags": [
+        "#ifdef USE_RX_EXPRESSLRS"
+      ]
+    },
+    {
+      "name": "expresslrs_model_id",
+      "type_expr": "VAR_UINT8 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, UINT8_MAX",
+      "pgn": "PG_RX_EXPRESSLRS_SPI_CONFIG",
+      "offset": "rxExpressLrsSpiConfig_t, modelId",
+      "feature_flags": [
+        "#ifdef USE_RX_EXPRESSLRS"
+      ]
+    },
+    {
+      "name": "timezone_offset_minutes",
+      "type_expr": "VAR_INT16 | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "TIMEZONE_OFFSET_MINUTES_MIN, TIMEZONE_OFFSET_MINUTES_MAX",
+      "pgn": "PG_TIME_CONFIG",
+      "offset": "timeConfig_t, tz_offsetMinutes",
+      "feature_flags": [
+        "#ifdef USE_RTC_TIME"
+      ]
+    },
+    {
+      "name": "gyro_rpm_notch_preset",
+      "type_expr": "VAR_UINT8 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 3",
+      "pgn": "PG_RPM_FILTER_CONFIG",
+      "offset": "rpmFilterConfig_t, preset",
+      "feature_flags": [
+        "#ifdef USE_RPM_FILTER"
+      ]
+    },
+    {
+      "name": "gyro_rpm_notch_min_hz",
+      "type_expr": "VAR_UINT8 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "1, 100",
+      "pgn": "PG_RPM_FILTER_CONFIG",
+      "offset": "rpmFilterConfig_t, min_hz",
+      "feature_flags": [
+        "#ifdef USE_RPM_FILTER"
+      ]
+    },
+    {
+      "name": "stats_min_armed_time_s",
+      "type_expr": "VAR_INT8   | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "STATS_OFF, INT8_MAX",
+      "pgn": "PG_STATS_CONFIG",
+      "offset": "statsConfig_t, stats_min_armed_time_s",
+      "feature_flags": [
+        "#ifdef USE_PERSISTENT_STATS"
+      ]
+    },
+    {
+      "name": "name",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_STRING",
+      "config_kind": "string",
+      "config_expr": "1, MAX_NAME_LENGTH, STRING_FLAGS_NONE",
+      "pgn": "PG_PILOT_CONFIG",
+      "offset": "pilotConfig_t, name",
+      "feature_flags": []
+    },
+    {
+      "name": "display_name",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_STRING",
+      "config_kind": "string",
+      "config_expr": "1, MAX_NAME_LENGTH, STRING_FLAGS_NONE",
+      "pgn": "PG_PILOT_CONFIG",
+      "offset": "pilotConfig_t, displayName",
+      "feature_flags": [
+        "#ifdef USE_OSD"
+      ]
+    },
+    {
+      "name": "model_id",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 99",
+      "pgn": "PG_PILOT_CONFIG",
+      "offset": "pilotConfig_t, modelId",
+      "feature_flags": []
+    },
+    {
+      "name": "model_param1_type",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_PARAM_TYPE",
+      "pgn": "PG_PILOT_CONFIG",
+      "offset": "pilotConfig_t, modelParam1Type",
+      "feature_flags": []
+    },
+    {
+      "name": "model_param1_value",
+      "type_expr": "VAR_INT16  | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "INT16_MIN, INT16_MAX",
+      "pgn": "PG_PILOT_CONFIG",
+      "offset": "pilotConfig_t, modelParam1Value",
+      "feature_flags": []
+    },
+    {
+      "name": "model_param2_type",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_PARAM_TYPE",
+      "pgn": "PG_PILOT_CONFIG",
+      "offset": "pilotConfig_t, modelParam2Type",
+      "feature_flags": []
+    },
+    {
+      "name": "model_param2_value",
+      "type_expr": "VAR_INT16  | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "INT16_MIN, INT16_MAX",
+      "pgn": "PG_PILOT_CONFIG",
+      "offset": "pilotConfig_t, modelParam2Value",
+      "feature_flags": []
+    },
+    {
+      "name": "model_param3_type",
+      "type_expr": "VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_PARAM_TYPE",
+      "pgn": "PG_PILOT_CONFIG",
+      "offset": "pilotConfig_t, modelParam3Type",
+      "feature_flags": []
+    },
+    {
+      "name": "model_param3_value",
+      "type_expr": "VAR_INT16  | MASTER_VALUE",
+      "config_kind": "minmax",
+      "config_expr": "INT16_MIN, INT16_MAX",
+      "pgn": "PG_PILOT_CONFIG",
+      "offset": "pilotConfig_t, modelParam3Value",
+      "feature_flags": []
+    },
+    {
+      "name": "position_alt_source",
+      "type_expr": "VAR_UINT8 | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_POSITION_ALT_SOURCE",
+      "pgn": "PG_POSITION",
+      "offset": "positionConfig_t, alt_source",
+      "feature_flags": []
+    },
+    {
+      "name": "position_baro_alt_lpf",
+      "type_expr": "VAR_UINT8 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "1, 250",
+      "pgn": "PG_POSITION",
+      "offset": "positionConfig_t, baro_alt_lpf",
+      "feature_flags": []
+    },
+    {
+      "name": "position_baro_offset_lpf",
+      "type_expr": "VAR_UINT8 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "1, 250",
+      "pgn": "PG_POSITION",
+      "offset": "positionConfig_t, baro_offset_lpf",
+      "feature_flags": []
+    },
+    {
+      "name": "position_gps_alt_lpf",
+      "type_expr": "VAR_UINT8 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "1, 250",
+      "pgn": "PG_POSITION",
+      "offset": "positionConfig_t, gps_alt_lpf",
+      "feature_flags": []
+    },
+    {
+      "name": "position_gps_offset_lpf",
+      "type_expr": "VAR_UINT8 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "1, 250",
+      "pgn": "PG_POSITION",
+      "offset": "positionConfig_t, gps_offset_lpf",
+      "feature_flags": []
+    },
+    {
+      "name": "position_gps_min_sats",
+      "type_expr": "VAR_UINT8 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "0, 50",
+      "pgn": "PG_POSITION",
+      "offset": "positionConfig_t, gps_min_sats",
+      "feature_flags": []
+    },
+    {
+      "name": "position_vario_lpf",
+      "type_expr": "VAR_UINT8 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "1, 250",
+      "pgn": "PG_POSITION",
+      "offset": "positionConfig_t, vario_lpf",
+      "feature_flags": []
+    },
+    {
+      "name": "box_user_1_name",
+      "type_expr": "VAR_UINT8 | MASTER_VALUE | MODE_STRING",
+      "config_kind": "string",
+      "config_expr": "1, MAX_BOX_USER_NAME_LENGTH, STRING_FLAGS_NONE",
+      "pgn": "PG_MODE_ACTIVATION_CONFIG",
+      "offset": "modeActivationConfig_t, box_user_1_name",
+      "feature_flags": [
+        "#if defined(USE_CUSTOM_BOX_NAMES)"
+      ]
+    },
+    {
+      "name": "box_user_2_name",
+      "type_expr": "VAR_UINT8 | MASTER_VALUE | MODE_STRING",
+      "config_kind": "string",
+      "config_expr": "1, MAX_BOX_USER_NAME_LENGTH, STRING_FLAGS_NONE",
+      "pgn": "PG_MODE_ACTIVATION_CONFIG",
+      "offset": "modeActivationConfig_t, box_user_2_name",
+      "feature_flags": [
+        "#if defined(USE_CUSTOM_BOX_NAMES)"
+      ]
+    },
+    {
+      "name": "box_user_3_name",
+      "type_expr": "VAR_UINT8 | MASTER_VALUE | MODE_STRING",
+      "config_kind": "string",
+      "config_expr": "1, MAX_BOX_USER_NAME_LENGTH, STRING_FLAGS_NONE",
+      "pgn": "PG_MODE_ACTIVATION_CONFIG",
+      "offset": "modeActivationConfig_t, box_user_3_name",
+      "feature_flags": [
+        "#if defined(USE_CUSTOM_BOX_NAMES)"
+      ]
+    },
+    {
+      "name": "box_user_4_name",
+      "type_expr": "VAR_UINT8 | MASTER_VALUE | MODE_STRING",
+      "config_kind": "string",
+      "config_expr": "1, MAX_BOX_USER_NAME_LENGTH, STRING_FLAGS_NONE",
+      "pgn": "PG_MODE_ACTIVATION_CONFIG",
+      "offset": "modeActivationConfig_t, box_user_4_name",
+      "feature_flags": [
+        "#if defined(USE_CUSTOM_BOX_NAMES)"
+      ]
+    },
+    {
+      "name": "sbus_out_frame_rate",
+      "type_expr": "VAR_UINT8 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "25, 250",
+      "pgn": "PG_DRIVER_SBUS_OUT_CONFIG",
+      "offset": "sbusOutConfig_t, frameRate",
+      "feature_flags": [
+        "#ifdef USE_SBUS_OUTPUT"
+      ]
+    },
+    {
+      "name": "sbus_out_pinswap",
+      "type_expr": "VAR_UINT8 | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_DRIVER_SBUS_OUT_CONFIG",
+      "offset": "sbusOutConfig_t, pinSwap",
+      "feature_flags": [
+        "#ifdef USE_SBUS_OUTPUT"
+      ]
+    },
+    {
+      "name": "sbus_out_inverted",
+      "type_expr": "VAR_UINT8 | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_DRIVER_SBUS_OUT_CONFIG",
+      "offset": "sbusOutConfig_t, inverted",
+      "feature_flags": [
+        "#ifdef USE_SBUS_OUTPUT"
+      ]
+    },
+    {
+      "name": "fbus_master_frame_rate",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "25, 550",
+      "pgn": "PG_DRIVER_FBUS_MASTER_CONFIG",
+      "offset": "fbusMasterConfig_t, frameRate",
+      "feature_flags": [
+        "#ifdef USE_FBUS_MASTER"
+      ]
+    },
+    {
+      "name": "fbus_master_pinswap",
+      "type_expr": "VAR_UINT8 | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_DRIVER_FBUS_MASTER_CONFIG",
+      "offset": "fbusMasterConfig_t, pinSwap",
+      "feature_flags": [
+        "#ifdef USE_FBUS_MASTER"
+      ]
+    },
+    {
+      "name": "fbus_master_inverted",
+      "type_expr": "VAR_UINT8 | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_DRIVER_FBUS_MASTER_CONFIG",
+      "offset": "fbusMasterConfig_t, inverted",
+      "feature_flags": [
+        "#ifdef USE_FBUS_MASTER"
+      ]
+    },
+    {
+      "name": "fbus_master_telemetry_rate",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "FBUS_MASTER_TELEMETRY_RATE_MIN_HZ, FBUS_MASTER_TELEMETRY_RATE_MAX_HZ",
+      "pgn": "PG_DRIVER_FBUS_MASTER_CONFIG",
+      "offset": "fbusMasterConfig_t, telemetryRate",
+      "feature_flags": [
+        "#ifdef USE_FBUS_MASTER"
+      ]
+    },
+    {
+      "name": "fbus_master_discovery_ms",
+      "type_expr": "VAR_UINT16 | MASTER_VALUE",
+      "config_kind": "minmaxUnsigned",
+      "config_expr": "FBUS_MASTER_DISCOVERY_TIME_MIN_MS, FBUS_MASTER_DISCOVERY_TIME_MAX_MS",
+      "pgn": "PG_DRIVER_FBUS_MASTER_CONFIG",
+      "offset": "fbusMasterConfig_t, sensorDiscoveryTimeMs",
+      "feature_flags": [
+        "#ifdef USE_FBUS_MASTER"
+      ]
+    },
+    {
+      "name": "sport_master_pinswap",
+      "type_expr": "VAR_UINT8 | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_DRIVER_SPORT_MASTER_CONFIG",
+      "offset": "sportMasterConfig_t, pinSwap",
+      "feature_flags": [
+        "#ifdef USE_SPORT_MASTER"
+      ]
+    },
+    {
+      "name": "sport_master_inverted",
+      "type_expr": "VAR_UINT8 | MASTER_VALUE | MODE_LOOKUP",
+      "config_kind": "lookup",
+      "config_expr": "TABLE_OFF_ON",
+      "pgn": "PG_DRIVER_SPORT_MASTER_CONFIG",
+      "offset": "sportMasterConfig_t, inverted",
+      "feature_flags": [
+        "#ifdef USE_SPORT_MASTER"
+      ]
+    }
+  ],
+  "metadata": {
+    "generated_from_source_only": true,
+    "generator": "scripts/generate_cli_dictionary.py",
+    "notes": [
+      "No commands inferred from sample dumps; intended for autocomplete and dump validation.",
+      "Regenerate this file for new firmware revisions when CLI commands/settings change.",
+      "Future direction: firmware-emitted CLI metadata would simplify this extraction path."
+    ]
+  }
+}
